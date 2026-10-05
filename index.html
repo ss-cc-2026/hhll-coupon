@@ -1,0 +1,795 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="robots" content="noindex">
+<meta name="referrer" content="no-referrer">
+<meta name="format-detection" content="telephone=no">
+<meta name="color-scheme" content="only light">
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'unsafe-inline'; style-src 'unsafe-inline'; img-src data:; connect-src https://docs.google.com; form-action 'none'; base-uri 'none'">
+<title>クーポンのご案内 | ハハロルオンラインクリニック</title>
+<link rel="icon" href="data:,">
+<!-- クーポン案内ページ(ハハロルオンラインクリニック) -->
+<style>
+  :root {
+    --cream: #FFF6EC; --green: #1F6F6B; --green-dark: #17534F; --green-soft: #E4F0EE;
+    --coral: #E0704A; --coral-strong: #C2502A; --coral-soft: #FBE9E1; --coral-ink: #A8401E;
+    --ink: #2B2B28; --sub: #5E574F; --line: #D6CBBD; --line-strong: #8C8276; --focus: #1A1A1A;
+    color-scheme: only light;
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  html { -webkit-text-size-adjust: 100%; text-size-adjust: 100%; }
+  body {
+    font-family: "Hiragino Maru Gothic ProN", "Hiragino Kaku Gothic ProN", "Hiragino Sans", "BIZ UDPGothic", "Noto Sans JP", "Meiryo", sans-serif;
+    background: var(--cream); color: var(--ink); font-size: 18px; line-height: 1.75; min-height: 100vh;
+  }
+  [hidden] { display: none !important; }
+  :focus-visible { outline: 3px solid var(--focus); outline-offset: 3px; }
+  .band { height: 8px; background: var(--green); }
+  .wrap { max-width: 480px; margin: 0 auto; padding: 20px 16px 48px; }
+
+  .hero { text-align: center; margin-bottom: 16px; }
+  .brand { font-size: 16px; font-weight: 700; color: var(--green); letter-spacing: .04em; }
+  h1 { color: var(--green); font-size: 26px; line-height: 1.4; margin: 6px 0 8px; }
+  h1 span { display: inline-block; }
+  /* 見出しの副題(クーポンの中身。打消しの条件をこの直下に置く) */
+  .sub { font-size: 20px; font-weight: 700; line-height: 1.5; color: var(--coral-ink); margin: 0 0 8px; }
+  .sub span { display: inline-block; }
+  /* 見出し直下の条件(全ステップで常に表示) */
+  .cond {
+    margin: 0 0 10px; padding: 10px 12px; border: 2px solid var(--line); border-left: 6px solid var(--coral-strong); border-radius: 10px;
+    background: #fff; color: var(--ink); font-size: 16px; line-height: 1.65; text-align: left;
+  }
+  .cond span { display: block; padding-left: 1em; text-indent: -1em; }
+  .cond span + span { margin-top: 4px; }
+  .lead { font-size: 16px; color: var(--sub); }
+
+  .progress { margin-bottom: 12px; }
+  .progress-text { font-size: 16px; font-weight: 700; color: var(--green); text-align: center; margin-bottom: 6px; }
+  .bar { display: flex; gap: 6px; }
+  .bar span { flex: 1; height: 8px; border-radius: 4px; background: #E6DCCF; }
+  .bar span.on { background: var(--green); }
+
+  .card { background: #fff; border-radius: 16px; padding: 22px 16px; box-shadow: 0 2px 8px rgba(0,0,0,.06); margin-bottom: 16px; }
+  h2 { font-size: 21px; line-height: 1.5; color: var(--green); margin-bottom: 6px; }
+  h2:focus { outline: none; }
+  fieldset { border: 0; min-width: 0; }
+  legend { padding: 0; width: 100%; }
+  .hint { font-size: 16px; color: var(--sub); margin: 4px 0 0; }
+
+  /* 選択肢(大きなボタン型のラジオ) */
+  .opts { display: grid; gap: 10px; margin: 14px 0 20px; }
+  .opt {
+    display: flex; align-items: center; gap: 12px; min-height: 60px; padding: 12px 14px;
+    border: 2px solid var(--line); border-radius: 14px; background: #fff; cursor: pointer;
+    font-size: 18px; line-height: 1.5;
+  }
+  .opt input { flex: none; width: 26px; height: 26px; margin: 0; accent-color: var(--green); cursor: pointer; }
+  .opt small { display: block; font-size: 16px; font-weight: 400; color: var(--sub); }
+  .opt.is-on { border-color: var(--green); background: var(--green-soft); font-weight: 700; }
+  .opt input:focus-visible { outline: none; }
+  /* キーボード操作のときだけ枠を出す(タップでは出さない) */
+  .opt:has(input:focus-visible), .check:has(input:focus-visible) { outline: 3px solid var(--focus); outline-offset: 2px; }
+  @supports not selector(:has(*)) {
+    .opt:focus-within, .check:focus-within { outline: 3px solid var(--focus); outline-offset: 2px; }
+  }
+
+  /* 選択画面 */
+  .modes { display: grid; gap: 12px; margin-top: 14px; }
+  .mode {
+    position: relative; display: block; width: 100%; min-height: 84px; padding: 16px 48px 16px 18px; text-align: left;
+    border: 2px solid var(--green); border-radius: 16px; background: #fff; color: var(--ink); font: inherit; cursor: pointer;
+  }
+  .mode strong { display: block; font-size: 20px; line-height: 1.5; color: var(--green); }
+  .mode span { display: block; font-size: 16px; color: var(--sub); }
+  .mode::after { content: "\203A"; position: absolute; right: 18px; top: 50%; transform: translateY(-50%); font-size: 30px; line-height: 1; color: var(--green); }
+  .mode:active { background: var(--green-soft); }
+
+  /* ボタン */
+  .btn {
+    display: block; width: 100%; min-height: 60px; padding: 14px 16px; border: 0; border-radius: 999px;
+    background: var(--green); color: #fff; font: inherit; font-size: 20px; font-weight: 700; cursor: pointer;
+  }
+  .btn:active { background: var(--green-dark); }
+  .btn-back {
+    display: block; width: 100%; min-height: 52px; margin-top: 12px; border: 2px solid var(--green); border-radius: 999px;
+    background: #fff; color: var(--green); font: inherit; font-size: 18px; font-weight: 700; cursor: pointer;
+  }
+
+  /* ご連絡先 */
+  .field { margin-bottom: 24px; }
+  .flabel { display: flex; align-items: center; flex-wrap: wrap; gap: 8px; font-size: 18px; font-weight: 700; color: var(--ink); margin-bottom: 8px; }
+  .badge { display: inline-block; font-size: 16px; line-height: 1.4; font-weight: 700; padding: 1px 8px; border-radius: 6px; }
+  .badge.req { background: var(--coral-soft); color: var(--coral-ink); }
+  .badge.any { background: #EFEAE3; color: var(--sub); }
+  input[type="tel"] {
+    display: block; width: 100%; min-height: 58px; padding: 10px 14px; font: inherit; font-size: 24px; letter-spacing: .04em;
+    border: 2px solid var(--line-strong); border-radius: 12px; background: #fff; color: var(--ink);
+  }
+  input[type="tel"]::placeholder { color: #7A7064; opacity: 1; }
+  input[type="tel"]:focus { border-color: var(--green); outline: 3px solid var(--focus); outline-offset: 2px; }
+  input[type="tel"][aria-invalid="true"] { border-color: var(--coral-strong); }
+  .consent { background: var(--green-soft); border-radius: 14px; padding: 16px 14px; margin-bottom: 24px; }
+  .consent-text { font-size: 17px; }
+  .consent a { display: inline-flex; align-items: center; min-height: 48px; color: var(--green); font-weight: 700; text-underline-offset: 3px; }
+  .consent .hint { margin: 0 0 8px; }
+  .check {
+    display: flex; align-items: center; gap: 12px; min-height: 56px; padding: 10px 12px; margin-top: 4px;
+    border: 2px solid var(--line); border-radius: 12px; background: #fff; cursor: pointer; font-weight: 700;
+  }
+  .check input { flex: none; width: 28px; height: 28px; margin: 0; accent-color: var(--green); cursor: pointer; }
+  .check.is-on { border-color: var(--green); }
+  .check input:focus-visible { outline: none; }
+  /* 人には見えない欄(機械的な送信の見分け用。空のまま送る) */
+  .hp { position: absolute; left: -10000px; top: auto; width: 1px; height: 1px; overflow: hidden; }
+
+  /* 確認 */
+  .summary { margin: 10px 0 20px; border-top: 1px solid var(--line); }
+  .summary > div { padding: 10px 0; border-bottom: 1px solid var(--line); }
+  .summary dt { font-size: 16px; color: var(--sub); }
+  .summary dd { display: flex; align-items: center; justify-content: space-between; gap: 12px; font-size: 18px; font-weight: 700; line-height: 1.5; }
+  .link-btn {
+    flex: none; min-width: 64px; min-height: 48px; padding: 0 12px; border: 2px solid var(--line-strong); border-radius: 10px;
+    background: #fff; color: var(--green); font: inherit; font-size: 16px; font-weight: 700; cursor: pointer;
+  }
+  .cta-card { background: var(--green); color: #fff; text-align: center; border-radius: 16px; padding: 20px 16px; }
+  .cta-card > p { font-size: 17px; margin-bottom: 14px; text-align: left; }
+  .cta-card > p.cta-cond { font-size: 16px; margin-bottom: 10px; padding-bottom: 10px; border-bottom: 1px solid rgba(255,255,255,.45); }
+  .msg-fig { margin-bottom: 16px; text-align: left; }
+  .msg-label { font-size: 16px; font-weight: 700; margin-bottom: 6px; color: #fff; }
+  .msg {
+    white-space: pre-wrap; word-break: break-all; font-family: inherit; font-size: 17px; line-height: 1.7; color: var(--ink);
+    background: #F7F3EC; border: 2px dashed var(--line-strong); border-radius: 12px; padding: 12px 14px;
+    -webkit-user-select: text; user-select: text;
+  }
+  .done-note { margin-bottom: 12px; padding: 12px 14px; border-radius: 12px; background: #fff; color: var(--ink); font-size: 17px; font-weight: 700; line-height: 1.7; text-align: left; border-left: 6px solid var(--coral-strong); }
+  .cta {
+    display: block; min-height: 64px; padding: 14px 16px; border-radius: 999px; background: var(--coral-strong); color: #fff;
+    text-decoration: none; font-size: 20px; font-weight: 700; line-height: 1.5; box-shadow: 0 3px 0 rgba(0,0,0,.18);
+  }
+  .cta small { display: block; font-size: 16px; font-weight: 400; }
+  .cta.is-busy { opacity: .75; }
+  .cta:focus-visible { outline: 3px solid #fff; outline-offset: 3px; }
+  .cta-hint { margin-top: 14px; padding: 12px 14px; border-radius: 12px; background: #fff; color: var(--ink); font-size: 17px; line-height: 1.7; text-align: left; }
+  .cta-hint:empty { display: none; }
+  .copy-area { margin-top: 18px; padding-top: 14px; border-top: 1px solid rgba(255,255,255,.45); text-align: left; }
+  .copy-area p { font-size: 16px; line-height: 1.7; }
+  .copy-area .copy-title { font-weight: 700; margin-bottom: 8px; }
+  .btn-copy {
+    display: block; width: 100%; min-height: 52px; margin-bottom: 8px; border: 0; border-radius: 999px;
+    background: #fff; color: var(--green); font: inherit; font-size: 18px; font-weight: 700; cursor: pointer;
+  }
+  .btn-copy:focus-visible { outline: 3px solid #fff; outline-offset: 3px; }
+  .copy-status { margin-top: 8px; padding: 10px 12px; border-radius: 10px; background: #fff; color: var(--ink); }
+  .copy-status:empty { display: none; }
+
+  /* 注記 */
+  .notes { margin-top: 24px; font-size: 16px; color: var(--sub); }
+  .notes ul { list-style: none; }
+  .notes li { padding-left: 1em; text-indent: -1em; margin-bottom: 6px; }
+  .privacy-note { margin-top: 14px; padding: 12px 14px; border-radius: 12px; background: #fff; }
+  .operator { margin-top: 14px; }
+  .operator a { display: inline-flex; align-items: center; min-height: 48px; color: var(--green); font-weight: 700; text-underline-offset: 3px; word-break: break-all; }
+
+  /* ダイアログ(alertは使わない) */
+  .dlg { position: fixed; top: 0; right: 0; bottom: 0; left: 0; z-index: 100; display: flex; align-items: center; justify-content: center; padding: 24px; background: rgba(0,0,0,.5); }
+  .dlg-box { width: 100%; max-width: 360px; padding: 22px 20px 18px; border-radius: 16px; background: #fff; box-shadow: 0 10px 30px rgba(0,0,0,.2); }
+  .dlg-title { font-size: 16px; font-weight: 700; color: var(--green); text-align: center; margin-bottom: 8px; }
+  .dlg-body { font-size: 18px; line-height: 1.7; white-space: pre-line; margin-bottom: 18px; }
+</style>
+</head>
+<body>
+<div class="band" aria-hidden="true"></div>
+<div class="wrap" id="wrap">
+  <header class="hero">
+    <p class="brand">ハハロルオンラインクリニック</p>
+    <h1 id="title"><span>クーポンのご案内</span></h1>
+    <p class="sub" id="sub" hidden></p>
+    <p class="cond" id="cond">※自由診療です。クーポンの対象・ご利用条件は診療ごとに異なります。選んだあとの画面でご確認ください。</p>
+    <p class="lead" id="lead">ご希望の診療をお選びください。</p>
+  </header>
+
+  <noscript><p class="card">このページを表示するには、JavaScriptを有効にしてください。</p></noscript>
+
+  <div class="progress" id="progress" hidden>
+    <p class="progress-text" id="progressText"></p>
+    <div class="bar" aria-hidden="true"><span></span><span></span><span></span></div>
+  </div>
+
+  <main>
+    <!-- 0 選択画面(パラメータなし・不正値) -->
+    <section class="card" id="s0" aria-labelledby="h0" hidden>
+      <h2 id="h0" tabindex="-1">どちらかお選びください</h2>
+      <p class="hint" id="h0hint">クーポンの種類を選んでください。</p>
+      <div class="modes">
+        <button type="button" class="mode" data-mode="aga"><strong>AGA(薄毛)治療</strong><span>男性の薄毛のご相談</span></button>
+        <button type="button" class="mode" data-mode="md"><strong>メディカルダイエット</strong><span>体重管理のご相談</span></button>
+      </div>
+    </section>
+
+    <!-- 1 気になっていること -->
+    <section class="card" id="s1" hidden>
+      <fieldset>
+        <legend><h2 id="h1q" tabindex="-1"></h2></legend>
+        <p class="hint">いちばん近いものを1つ選んでください。症状や病歴のご記入は不要です。</p>
+        <p class="hint">※お薬の効果や副作用は、診察で医師がご説明します。お電話では、クーポンとご予約の手続きをご案内します。</p>
+        <div class="opts" id="concernOpts"></div>
+      </fieldset>
+      <button type="button" class="btn" id="next1">次へ</button>
+      <button type="button" class="btn-back" id="back1" hidden>種類を選び直す</button>
+    </section>
+
+    <!-- 2 ご連絡先 -->
+    <section class="card" id="s2" aria-labelledby="h2c" hidden>
+      <h2 id="h2c" tabindex="-1">お電話でのご案内を希望される方の連絡先</h2>
+      <p class="hint" id="s2hint" style="margin-bottom:18px">入力のあと「確認へ進む」を押すと、入力内容が受付担当に届きます。</p>
+      <form id="f2" novalidate>
+        <div class="field">
+          <label class="flabel" for="tel">お電話番号(携帯・ご自宅) <span class="badge req">必須</span></label>
+          <input type="tel" id="tel" inputmode="tel" autocomplete="tel" maxlength="24" placeholder="例) 090-0000-0000" aria-required="true" aria-describedby="telHint">
+          <p class="hint" id="telHint">ハイフン(-)はあってもなくても大丈夫です。携帯電話でも、ご自宅の固定電話でもお受けします。</p>
+        </div>
+        <fieldset class="field">
+          <legend class="flabel">お電話の希望の時間帯 <span class="badge any">任意</span></legend>
+          <div class="opts" id="timeOpts" style="margin:6px 0 8px"></div>
+          <p class="hint">受付時間は毎日10:00〜20:00(土日祝も)です。受付時間外のお申し込みは、次の受付時間にお電話します。ご希望の時間帯に沿えない場合があります。</p>
+        </fieldset>
+        <div class="hp" aria-hidden="true">
+          <label for="hpf">この欄には何も入力しないでください</label>
+          <input type="text" id="hpf" name="hpf" tabindex="-1" autocomplete="off" maxlength="100">
+        </div>
+        <div class="consent">
+          <p class="consent-text">「確認へ進む」を押した時点で、入力内容(ご希望の診療・気になっていること・電話番号・希望の時間帯)が受付担当(社内の連絡ツール)に送信されます。送信にはGoogleのサービス(Googleフォーム)を使います。入力内容は、ハハロルオンラインクリニック(提携医療機関)と、本ページを運営する超楽長寿株式会社が、クーポンのご案内と、診察・ご予約に関するお電話のためにのみ使います。</p>
+          <a href="https://hhll.app/clinic/privacypolicy/" target="_blank" rel="noopener noreferrer">プライバシーポリシー(別のページが開きます)</a>
+          <p class="hint">見たあとは、画面の戻る(&lt;)でこのページに戻ってください。</p>
+          <label class="check" id="agreeLabel"><input type="checkbox" id="agree" aria-required="true"><span>上記に同意し、クーポンのご案内のため、カウンセラーからのお電話を希望します。 <span class="badge req">必須</span></span></label>
+        </div>
+        <button type="submit" class="btn">確認へ進む</button>
+      </form>
+      <button type="button" class="btn-back" data-back>戻る</button>
+    </section>
+
+    <!-- 3 確認 → LINEへ -->
+    <section class="card" id="s3" aria-labelledby="h3" hidden>
+      <h2 id="h3" tabindex="-1">内容をご確認ください</h2>
+      <dl class="summary">
+        <div><dt>気になっていること</dt><dd><span id="sumConcern"></span><button type="button" class="link-btn" data-goto="1" aria-label="気になっていることを変更">変更</button></dd></div>
+        <div><dt>お電話番号(携帯・ご自宅)</dt><dd><span id="sumTel"></span><button type="button" class="link-btn" data-goto="2" aria-label="お電話番号を変更">変更</button></dd></div>
+        <div><dt>お電話の希望の時間帯</dt><dd><span id="sumTime"></span><button type="button" class="link-btn" data-goto="2" aria-label="希望の時間帯を変更">変更</button></dd></div>
+      </dl>
+      <div class="cta-card">
+        <p class="cta-cond" id="ctaCond"></p>
+        <p id="ctaGuide"></p>
+        <figure class="msg-fig" aria-labelledby="msgLabel">
+          <figcaption class="msg-label" id="msgLabel">LINEのトークに、次の文が入ります</figcaption>
+          <pre class="msg" id="msg" translate="no"></pre>
+        </figure>
+        <p class="done-note" id="doneNote" role="status" hidden>LINEで送信できた方は、これで完了です。このページは閉じてかまいません。</p>
+        <a class="cta" id="cta" href="#"><span id="ctaMain">LINEでクーポンのご案内を受け取る</span><small>LINEのトーク画面が開きます。クーポンはお支払いのときに当院で適用します</small></a>
+        <p class="cta-hint" id="ctaHint" role="status" aria-live="polite"></p>
+        <div class="copy-area">
+          <p class="copy-title">LINEが開かないときは</p>
+          <button type="button" class="btn-copy" id="copyBtn">文をコピーする</button>
+          <p>コピーしたら、ハハロルオンラインクリニックのトークに貼り付けて送信してください。</p>
+          <p class="copy-status" id="copyStatus" role="status" aria-live="polite"></p>
+        </div>
+      </div>
+      <button type="button" class="btn-back" data-back>戻る</button>
+    </section>
+  </main>
+
+  <aside class="notes" aria-label="ご確認ください">
+    <ul id="notes"></ul>
+    <p class="privacy-note">「確認へ進む」を押した時点で、入力内容(ご希望の診療・気になっていること・電話番号・希望の時間帯)が受付担当(社内の連絡ツール)に送信されます。送信にはGoogleのサービス(Googleフォーム)を使います。お電話番号は端末に保存しません(ページを開いている間だけ使います)。画面を戻ったときに続きから選べるよう、選んだ項目の番号だけをブラウザの履歴に持ちます。</p>
+    <p class="operator">診療を行う医療機関: ハハロルオンラインクリニック(提携医療機関)<br>本ページの運営: 超楽長寿株式会社<br>お問い合わせ: <a href="mailto:support-clinic@hhll.tech">support-clinic@hhll.tech</a></p>
+  </aside>
+</div>
+
+<div class="dlg" id="dlg" hidden>
+  <div class="dlg-box" role="alertdialog" aria-modal="true" aria-labelledby="dlgT" aria-describedby="dlgB">
+    <p class="dlg-title" id="dlgT">ハハロルオンラインクリニック</p>
+    <p class="dlg-body" id="dlgB"></p>
+    <button type="button" class="btn" id="dlgOk">OK</button>
+  </div>
+</div>
+
+<script>
+(function () {
+  'use strict';
+
+  // 受付への送信先(Googleフォームの formResponse と、送信内容のJSONを入れる段落欄の entry)。どちらかが '' のあいだは何も送らない
+  var FORM_ACTION = 'https://docs.google.com/forms/d/e/1FAIpQLSeZxWdJjPheOwWr5KdIcQEOeiv9RO_j6GPp0oO4AGr6bITg3w/formResponse';
+  var FORM_ENTRY = 'entry.1217027792';
+  var PAGE_V = '2026-10-06.1';
+
+  var OA_ID = '@837mhqha';
+  var HOURS = '毎日10:00〜20:00(土日祝も)';
+  // 入力の前に出す流れの説明(ステップ2の電話番号欄の上)
+  var FLOW_INPUT = '入力のあと「確認へ進む」を押すと、入力内容が受付担当に届き、カウンセラーからクーポンとご予約の手続きについてお電話します。最後にLINEで送信すると、クーポンのご案内がLINEに届きます。';
+  // ステップ3(LINEへ)で出す説明(ボタンの前に1回だけ)
+  var FLOW_LINE = 'LINEで送信すると、すぐにLINEでクーポンのご案内が届き、お申し込みの控えになります。カウンセラーからのお電話は' + HOURS + 'におかけします。';
+  // enabled が true で、cond(見出し直下の条件)と costNote(費用の注記)が入っている診療だけを表示する。それ以外は ?m= で開いても選択画面になる
+  // title = 見出し(h1)、sub = 見出しの副題(クーポンの中身)、cond = 副題の直下の条件(\n で行を分ける)
+  var MODES = {
+    aga: {
+      enabled: false,
+      title: ['AGA(薄毛)治療', '初回クーポン'], sub: '90日分のうち1ヶ月分が無料(約33%OFF)',
+      topic: 'AGA(薄毛)治療', key: '#初月無料クーポン申込_AGA',
+      cond: '※自由診療・税込・初回購入限定。90日分のお薬をまとめてお届けし、初回はそのうち1ヶ月分が無料(約33%OFF)です。\n' +
+        '※初回のお支払い6,480円〜(通常9,720円〜・お薬により異なります)。2回目以降は通常価格です。\n' +
+        '※対象は1種類のお薬の90日分です(2種類のセットは確認中)。詳しい条件はLINEでご案内します。',
+      ctaCond: '※自由診療・税込・初回購入限定。90日分のうち1ヶ月分が無料(約33%OFF)で、初回のお支払いは6,480円〜(通常9,720円〜・お薬により異なります)。2回目以降は通常価格です。詳しいご利用条件は、LINEで送信したあと、LINEでご案内します。',
+      target: '※このLINEで初めてお薬をご購入される方(初回購入限定)が対象です。',
+      noRx: '※お薬の処方の可否は医師が診察で判断します。処方に至らない場合の費用は、お電話でご案内します。',
+      costNote: '※費用(2回目以降を含む総額)と主なリスク・副作用は、LINEでご案内し、診察で医師がご説明します。'
+    },
+    md: {
+      enabled: true,
+      title: ['メディカルダイエット', '初回クーポン'], sub: '注射は初月0円・飲み薬は初月半額',
+      topic: 'メディカルダイエット', key: '#初月無料クーポン申込_MD',
+      cond: '※毎月お届けの定期コース(最低3ヶ月)。最初の3ヶ月の総額: 飲み薬 26,125円〜/注射 65,560円〜\n' +
+        '※2ヶ月目以降は通常価格: 飲み薬 月10,450円/注射 月32,780円〜\n' +
+        '※自由診療・税込・初回限定(毎月各先着30名様限定)。毎月更新の定期契約(最大12ヶ月)で、3ヶ月では終了しません。\n' +
+        '※3ヶ月未満の途中解約は初月割引分を精算します(医師判断の中止を除く)。4ヶ月目以降はいつでも解約できます。',
+      ctaCond: '※自由診療・税込。注射は初月0円・飲み薬は初月半額で、最初の3ヶ月の総額は 飲み薬 26,125円〜/注射 65,560円〜です(毎月お届けの定期コース・最低3ヶ月)。解約の方法など詳しいご利用条件は、LINEで送信したあと、LINEでご案内します。',
+      target: '※当院で初めてメディカルダイエットの診察を受ける方が対象です。',
+      noRx: '※お薬の処方の可否は医師が診察で判断します。処方に至らない場合、費用はかかりません。',
+      costNote: '※費用(2ヶ月目以降を含む総額)と主なリスク・副作用は、LINEでご案内し、診察で医師がご説明します。'
+    }
+  };
+  var COND_NONE = '※自由診療です。クーポンの対象・ご利用条件は診療ごとに異なります。選んだあとの画面でご確認ください。';
+  var COST_NOTE_NONE = '※費用(総額)と主なリスク・副作用は、LINEでご案内し、診察で医師がご説明します。';
+  var NOTES_COMMON_HEAD = ['※自由診療です。'];
+  var NOTES_COUPON = '※クーポンの対象・内容・ご利用条件は、LINEでご案内します。';
+  var NOTES_COMMON_TAIL = ['※対面受診をご案内する場合があります。'];
+  // short = LINE本文に入る短い語
+  var CONCERNS = [
+    { v: 1, label: '料金や総額が知りたい', short: '総額' },
+    { v: 2, label: 'スマホやオンライン診療の操作が心配', short: 'スマホ' },
+    { v: 3, label: '年齢・持病・体質で受けられるか気になる', short: '受診条件' },
+    { v: 4, label: '効果や副作用をもう少し知りたい', short: '効果・副作用' },
+    { v: 5, label: '家族や周りに知られないか心配', short: 'プライバシー' },
+    { v: 6, label: '予約の方法が分かりにくかった', short: '申込方法' },
+    { v: 7, label: '今は比較・検討中', short: '比較検討中' },
+    { v: 8, label: 'その他', short: 'その他' }
+  ];
+  var TIMES = [
+    { v: 'any', label: 'いつでも', note: '', msg: 'いつでも' },
+    { v: 'am', label: '午前', note: '10:00〜12:00', msg: '午前(10〜12時)' },
+    { v: 'pm', label: '午後', note: '12:00〜17:00', msg: '午後(12〜17時)' },
+    { v: 'ev', label: '夕方以降', note: '17:00〜20:00', msg: '夕方以降(17〜20時)' }
+  ];
+  var STEP_NAMES = ['', '気になること', 'ご連絡先', '確認'];
+  var HEADINGS = ['h0', 'h1q', 'h2c', 'h3'];
+  var PHONE_MSG = {
+    empty: 'お電話番号を入力してください。',
+    service: '050・0120・0570などの番号はお受けできません。\n携帯電話か、ご自宅の電話番号を入力してください。',
+    format: 'お電話番号をご確認ください。\n携帯電話は11けた(例 090-0000-0000)、ご自宅の電話は市外局番から10けた(例 03-0000-0000)で入力してください。'
+  };
+
+  // 電話番号はこの変数(ページのメモリ)にだけ持つ。端末には保存しない。「確認へ進む」で受付へ送る(同じ内容は1回だけ)
+  var state = { mode: null, concern: 0, time: 'any', phone: '', s0i: null };
+  var cur = -1, histIndex = 0, dlgReturn = null, lastSentKey = '';
+
+  function $(id) { return document.getElementById(id); }
+  var wrap = $('wrap'), telEl = $('tel'), agreeEl = $('agree'), hpEl = $('hpf'), ctaEl = $('cta'), ctaMain = $('ctaMain'), ctaHint = $('ctaHint');
+  var doneNote = $('doneNote'), copyStatus = $('copyStatus');
+  var dlg = $('dlg'), dlgBody = $('dlgB'), dlgOk = $('dlgOk');
+  var sections = [$('s0'), $('s1'), $('s2'), $('s3')];
+  var bars = document.querySelectorAll('.bar span');
+
+  function isOn(m) {
+    return Object.prototype.hasOwnProperty.call(MODES, m) && MODES[m].enabled === true && !!MODES[m].cond && !!MODES[m].costNote;
+  }
+
+  /* ---------- 電話番号: 全角/半角・ハイフン有無を受け付け、日本の携帯(11桁)/固定(10桁)だけ通す ---------- */
+  var SEP_CHARS = '\\s\\u3000\\-\\u2010-\\u2015\\u2212\\u30FC\\uFF70\\uFF0D\\uFE63().\\uFF0E\\u30FB';
+  var SEP = new RegExp('[' + SEP_CHARS + ']+');
+  var BAD = new RegExp('[^0-9+' + SEP_CHARS + ']');
+  var SERVICE = /^0(20|50|120|570|800|180|990)/;   // IP電話・フリーダイヤル・ナビダイヤル等
+  function toHalf(s) {
+    return s.replace(/[０-９＋（）]/g, function (c) { return String.fromCharCode(c.charCodeAt(0) - 0xFEE0); });
+  }
+  // 戻り値: { ok: true, value: '090-1234-5678' } / { ok: false, reason: 'empty' | 'service' | 'format' }
+  function parsePhone(raw) {
+    var s = toHalf(String(raw || '')).replace(/^[\s　]+|[\s　]+$/g, '');
+    if (!s) return { ok: false, reason: 'empty' };
+    if (BAD.test(s) || s.indexOf('+') > 0) return { ok: false, reason: 'format' };
+    var groups = s.replace(/^\+/, '').split(SEP).filter(function (g) { return g !== ''; });
+    var digits = groups.join('');
+    var intl = false;
+    if (/^81/.test(digits)) {            // +81 / 81 で始まる国際表記
+      digits = digits.slice(2);
+      if (digits.charAt(0) !== '0') digits = '0' + digits;
+      intl = true;
+    } else if (s.charAt(0) === '+') {
+      return { ok: false, reason: 'format' };   // 日本以外の国番号
+    }
+    if (SERVICE.test(digits)) return { ok: false, reason: 'service' };
+    if (digits.length === 11 && /^0[6-9]0\d{8}$/.test(digits) && !/^0800/.test(digits)) {
+      return { ok: true, value: digits.slice(0, 3) + '-' + digits.slice(3, 7) + '-' + digits.slice(7) };
+    }
+    if (digits.length === 10 && /^0[1-9][1-9]\d{7}$/.test(digits)) {
+      if (!intl && groups.length === 3 && groups[0].charAt(0) === '0' && groups[0].length >= 2 && groups[0].length <= 5 && groups[2].length === 4) {
+        return { ok: true, value: groups.join('-') };   // 入力どおりの区切りを残す(市外局番の桁数が地域で違うため)
+      }
+      if (/^0[36]/.test(digits)) return { ok: true, value: digits.slice(0, 2) + '-' + digits.slice(2, 6) + '-' + digits.slice(6) };
+      return { ok: true, value: digits.slice(0, 3) + '-' + digits.slice(3, 6) + '-' + digits.slice(6) };
+    }
+    return { ok: false, reason: 'format' };
+  }
+
+  /* ---------- LINE本文 ---------- */
+  function timeObj() {
+    for (var i = 0; i < TIMES.length; i++) if (TIMES[i].v === state.time) return TIMES[i];
+    return TIMES[0];
+  }
+  function buildMessage() {
+    var c = CONCERNS[state.concern - 1];
+    return [
+      MODES[state.mode].key,
+      '気になること:' + c.v + ' ' + c.short,
+      '連絡先:' + state.phone,
+      '希望時間:' + timeObj().msg
+    ].join('\n');
+  }
+  // LINE ID の @ も %40 にする(LINE の URL スキームの書式)
+  function lineUrl(text) { return 'https://line.me/R/oaMessage/' + encodeURIComponent(OA_ID) + '/?' + encodeURIComponent(text); }
+
+  /* ---------- 受付への送信(「確認へ進む」で1回。失敗しても画面は進む。LINEの送信が控え) ---------- */
+  var UID_RE = /^[A-Za-z0-9_-]{1,64}$/;
+  function readUid(search) {
+    var u = '';
+    try { u = new URLSearchParams(search || '').get('uid') || ''; } catch (e) { u = ''; }
+    return UID_RE.test(u) ? u : '';
+  }
+  // ページを開くたびに作る識別子(小文字16進32文字)。同じ画面からの番号・種類の訂正を見分けるために送る
+  // このページのメモリにだけ持つ(端末・ブラウザの履歴・URLには入れない)。作れない端末では '' になり、送信しない
+  function makeSid() {
+    try {
+      var b = new Uint8Array(16);
+      crypto.getRandomValues(b);
+      var s = '';
+      for (var i = 0; i < b.length; i++) s += (b[i] < 16 ? '0' : '') + b[i].toString(16);
+      return /^[0-9a-f]{32}$/.test(s) ? s : '';
+    } catch (e) { return ''; }
+  }
+  var SID = makeSid();
+  function buildPayload(uid, hp) {
+    var c = CONCERNS[state.concern - 1];
+    return {
+      type: state.mode, concernNo: c.v, concernShort: c.short, phone: state.phone, time: state.time,
+      uid: uid, sid: SID, ts: new Date().toISOString(), v: PAGE_V, hp: String(hp || '').slice(0, 100)
+    };
+  }
+  // 同じ内容かどうかの見分け(ts と v は含めない)
+  function leadKey(p) { return JSON.stringify([p.type, p.concernNo, p.phone, p.time, p.uid, p.sid, p.hp]); }
+  function currentPayload() { return buildPayload(readUid(location.search), hpEl.value); }
+  // 送信先のどちらかが '' か、sid を作れない端末では送らない(guard も同じ条件で見る)
+  function sendLead() {
+    if (!FORM_ACTION || !FORM_ENTRY || !SID) return;
+    var p = currentPayload();
+    var key = leadKey(p);
+    if (key === lastSentKey) return;
+    lastSentKey = key;
+    try {
+      fetch(FORM_ACTION, { method: 'POST', mode: 'no-cors', body: new URLSearchParams([[FORM_ENTRY, JSON.stringify(p)]]) })['catch'](function () {});
+    } catch (e) {}
+  }
+
+  /* ---------- 画面の組み立て ---------- */
+  function makeOpt(name, value, text, note, checked, onChange) {
+    var label = document.createElement('label');
+    label.className = 'opt';
+    var input = document.createElement('input');
+    input.type = 'radio'; input.name = name; input.value = value; input.checked = !!checked;
+    input.addEventListener('change', onChange);
+    var span = document.createElement('span');
+    span.textContent = text;
+    if (note) { var sm = document.createElement('small'); sm.textContent = note; span.appendChild(sm); }
+    label.appendChild(input); label.appendChild(span);
+    return label;
+  }
+  function paintOpts(boxId) {
+    var labels = $(boxId).querySelectorAll('.opt');
+    for (var i = 0; i < labels.length; i++) {
+      var inp = labels[i].querySelector('input');
+      labels[i].classList.toggle('is-on', inp.checked);
+    }
+  }
+  function smoothOk() {
+    try { return !window.matchMedia('(prefers-reduced-motion: reduce)').matches; } catch (e) { return true; }
+  }
+  function buildOptions() {
+    var box = $('concernOpts');
+    CONCERNS.forEach(function (c) {
+      box.appendChild(makeOpt('concern', c.v, c.label, '', c.v === state.concern, function () {
+        state.concern = Number(this.value); paintOpts('concernOpts'); saveHist();
+        var nx = $('next1');
+        try { nx.scrollIntoView({ block: 'nearest', behavior: smoothOk() ? 'smooth' : 'auto' }); } catch (e) { nx.scrollIntoView(false); }
+      }));
+    });
+    paintOpts('concernOpts');
+    var tbox = $('timeOpts');
+    TIMES.forEach(function (t) {
+      tbox.appendChild(makeOpt('time', t.v, t.label, t.note, t.v === state.time, function () { state.time = this.value; paintOpts('timeOpts'); saveHist(); }));
+    });
+    paintOpts('timeOpts');
+  }
+  function buildModeButtons() {
+    var on = 0;
+    Array.prototype.forEach.call(document.querySelectorAll('.mode'), function (b) {
+      var m = b.getAttribute('data-mode');
+      b.hidden = !isOn(m);
+      if (!b.hidden) on += 1;
+    });
+    if (on < 2) {
+      $('h0').textContent = 'こちらからお進みください';
+      $('h0hint').textContent = '現在ご案内しているクーポンは、次の診療です。';
+    }
+  }
+  function paintHeader(step) {
+    var m = state.mode ? MODES[state.mode] : null;
+    var title = $('title');
+    title.textContent = '';
+    (m ? m.title : ['クーポンのご案内']).forEach(function (t, i) {
+      if (i) title.appendChild(document.createTextNode(' '));
+      var sp = document.createElement('span'); sp.textContent = t; title.appendChild(sp);
+    });
+    var sub = $('sub');
+    sub.textContent = '';
+    sub.hidden = !(m && m.sub);
+    if (m && m.sub) {
+      // 「・」のあとと「(」の前でだけ折り返す(言葉の途中で改行しない)
+      m.sub.replace(/・/g, '・\u0001').replace(/\(/g, '\u0001(').split('\u0001').forEach(function (t) {
+        if (!t) return;
+        var sp = document.createElement('span'); sp.textContent = t; sub.appendChild(sp);
+      });
+    }
+    // 条件は \n ごとに1行(行頭の※をそろえる)
+    var cond = $('cond');
+    cond.textContent = '';
+    String(m ? m.cond : COND_NONE).split('\n').forEach(function (t) {
+      var sp = document.createElement('span'); sp.textContent = t; cond.appendChild(sp);
+    });
+    var lead = $('lead');
+    lead.textContent = m ? 'かんたんな3ステップ(約1分)です。' : 'ご希望の診療をお選びください。';
+    lead.hidden = step >= 2;
+    $('h1q').textContent = m ? m.topic + 'について、いま気になっていることを1つお選びください' : '';
+    var notes = $('notes');
+    notes.textContent = '';
+    var list = m ? NOTES_COMMON_HEAD.concat([m.target, m.noRx, NOTES_COUPON, m.costNote], NOTES_COMMON_TAIL)
+      : NOTES_COMMON_HEAD.concat([NOTES_COUPON, COST_NOTE_NONE], NOTES_COMMON_TAIL);
+    list.forEach(function (t) { var li = document.createElement('li'); li.textContent = t; notes.appendChild(li); });
+  }
+  function resetCta() {
+    ctaEl.classList.remove('is-busy');
+    ctaMain.textContent = 'LINEでクーポンのご案内を受け取る';
+    ctaHint.textContent = '';
+    doneNote.hidden = true;
+    copyStatus.textContent = '';
+  }
+  function fillConfirm() {
+    var c = CONCERNS[state.concern - 1], t = timeObj();
+    $('sumConcern').textContent = c.label;
+    $('sumTel').textContent = state.phone;
+    $('sumTime').textContent = t.label + (t.note ? '(' + t.note + ')' : '');
+    $('ctaCond').textContent = MODES[state.mode].ctaCond;
+    var msg = buildMessage();
+    $('msg').textContent = msg;
+    ctaEl.href = lineUrl(msg);
+    resetCta();
+  }
+  function render(step, moveFocus) {
+    cur = step;
+    for (var i = 0; i < sections.length; i++) sections[i].hidden = (i !== step);
+    $('progress').hidden = (step === 0);
+    if (step > 0) {
+      $('progressText').textContent = 'ステップ ' + step + ' / 3　' + STEP_NAMES[step];
+      for (var j = 0; j < bars.length; j++) bars[j].classList.toggle('on', j < step);
+    }
+    $('back1').hidden = !(step === 1 && state.s0i !== null);
+    paintHeader(step);
+    if (step === 3) fillConfirm();
+    window.scrollTo(0, 0);
+    if (moveFocus) {
+      var h = $(HEADINGS[step]);
+      try { h.focus({ preventScroll: true }); } catch (e) { h.focus(); }
+    }
+  }
+
+  /* ---------- 画面遷移(端末の「戻る」でも1つ前の画面へ) ---------- */
+  function modeFromUrl() {
+    var m = '';
+    try { m = (new URLSearchParams(location.search).get('m') || '').trim().toLowerCase(); } catch (e) {}
+    return isOn(m) ? m : null;
+  }
+  function urlFor(mode) {
+    var p = new URLSearchParams(location.search);
+    if (mode) p.set('m', mode); else p['delete']('m');
+    var q = p.toString();
+    return location.pathname + (q ? '?' + q : '');
+  }
+  // 履歴には画面の位置と選択だけを持つ(電話番号は入れない)
+  function histState(step) {
+    return { step: step, i: histIndex, s0i: state.mode ? state.s0i : null, c: state.concern || 0, t: state.time };
+  }
+  function saveHist() {
+    if (cur < 0) return;
+    try { history.replaceState(histState(cur), '', urlFor(state.mode)); } catch (e) {}
+  }
+  function guard(step) {
+    if (step >= 1 && !state.mode) return 0;
+    if (step >= 2 && !state.concern) return 1;
+    if (step >= 3) {
+      var p = parsePhone(telEl.value);
+      if (!p.ok || !agreeEl.checked) return 2;
+      state.phone = p.value;
+      // 送った内容と今の入力が違う(端末の「進む」・読み込み直しで来た)ときは、もう一度「確認へ進む」を押してもらう
+      if (FORM_ACTION && FORM_ENTRY && SID && leadKey(currentPayload()) !== lastSentKey) return 2;
+    }
+    return step;
+  }
+  function go(step, how) {
+    step = guard(step);
+    render(step, how !== 'init');
+    try {
+      if (how === 'push') {
+        histIndex += 1;
+        history.pushState(histState(step), '', urlFor(state.mode));
+      } else {
+        history.replaceState(histState(step), '', urlFor(state.mode));
+      }
+    } catch (e) {}
+  }
+  window.addEventListener('popstate', function (e) {
+    var s = e.state || {};
+    state.mode = modeFromUrl();
+    histIndex = s.i || 0;
+    state.s0i = (state.mode && typeof s.s0i === 'number') ? s.s0i : null;
+    var want = typeof s.step === 'number' ? s.step : (state.mode ? 1 : 0);
+    var step = guard(want);
+    render(step, true);
+    if (step !== want) { try { history.replaceState(histState(step), '', urlFor(state.mode)); } catch (e2) {} }
+  });
+  function back() {
+    if (histIndex > 0) history.back();
+    else go(Math.max(cur - 1, state.mode ? 1 : 0), 'replace');
+  }
+  function backToSelect() {
+    if (state.s0i !== null && histIndex > state.s0i) { history.go(state.s0i - histIndex); return; }
+    state.mode = null; state.s0i = null;
+    go(0, 'replace');
+  }
+
+  /* ---------- ダイアログ ---------- */
+  function showDlg(msg, returnTo) {
+    dlgBody.textContent = msg;
+    dlgReturn = returnTo || null;
+    dlg.hidden = false;
+    wrap.setAttribute('aria-hidden', 'true');
+    if ('inert' in wrap) wrap.inert = true;
+    dlgOk.focus();
+  }
+  function hideDlg() {
+    dlg.hidden = true;
+    wrap.removeAttribute('aria-hidden');
+    if ('inert' in wrap) wrap.inert = false;
+    if (dlgReturn) dlgReturn.focus();
+  }
+  dlgOk.addEventListener('click', hideDlg);
+  dlg.addEventListener('click', function (e) { if (e.target === dlg) hideDlg(); });
+  dlg.addEventListener('keydown', function (e) {
+    if (e.key === 'Escape' || e.key === 'Esc') { e.preventDefault(); hideDlg(); }
+    else if (e.key === 'Tab') { e.preventDefault(); dlgOk.focus(); }
+  });
+
+  /* ---------- 操作 ---------- */
+  Array.prototype.forEach.call(document.querySelectorAll('.mode'), function (b) {
+    b.addEventListener('click', function () {
+      var m = b.getAttribute('data-mode');
+      if (!isOn(m)) return;
+      state.mode = m; state.s0i = histIndex;
+      go(1, 'push');
+    });
+  });
+  $('next1').addEventListener('click', function () {
+    if (!state.concern) { showDlg('気になっていることを1つお選びください。', $('concernOpts').querySelector('input')); return; }
+    go(2, 'push');
+  });
+  $('back1').addEventListener('click', backToSelect);
+  telEl.addEventListener('blur', function () {
+    var p = parsePhone(telEl.value);
+    if (p.ok) { telEl.value = p.value; telEl.removeAttribute('aria-invalid'); }
+  });
+  agreeEl.addEventListener('change', function () { $('agreeLabel').classList.toggle('is-on', agreeEl.checked); });
+  $('f2').addEventListener('submit', function (e) {
+    e.preventDefault();
+    var p = parsePhone(telEl.value);
+    if (!p.ok) {
+      telEl.setAttribute('aria-invalid', 'true');
+      showDlg(PHONE_MSG[p.reason] || PHONE_MSG.format, telEl);
+      return;
+    }
+    telEl.value = p.value; telEl.removeAttribute('aria-invalid'); state.phone = p.value;
+    if (!agreeEl.checked) { showDlg('ご利用目的と送信のタイミングをご確認のうえ、「お電話を希望します」の欄にチェックを入れてください。', agreeEl); return; }
+    sendLead();
+    go(3, 'push');
+  });
+  Array.prototype.forEach.call(document.querySelectorAll('[data-back]'), function (b) { b.addEventListener('click', back); });
+  Array.prototype.forEach.call(document.querySelectorAll('[data-goto]'), function (b) {
+    b.addEventListener('click', function () { go(Number(b.getAttribute('data-goto')), 'push'); });
+  });
+
+  // LINEへ(oaMessage でトークに本文を入れ、ご本人が送信)
+  ctaEl.addEventListener('click', function () {
+    ctaEl.classList.add('is-busy');
+    ctaMain.textContent = 'LINEを開いています…';
+    doneNote.hidden = true;
+    ctaHint.textContent = 'LINEでは、文は変えずに、右下の送信ボタン(紙飛行機のマーク)を押してください。';
+    setTimeout(restoreCta, 5000);
+  });
+  function restoreCta() {
+    if (!ctaEl.classList.contains('is-busy')) return;
+    ctaEl.classList.remove('is-busy');
+    doneNote.hidden = false;
+    ctaMain.textContent = 'まだ送信していない方：もう一度LINEを開く';
+  }
+  document.addEventListener('visibilitychange', function () { if (document.visibilityState === 'visible') restoreCta(); });
+
+  // コピー(端末のクリップボードに入れるだけ。外部へは送らない)
+  function selectMsg() {
+    try {
+      var r = document.createRange(); r.selectNodeContents($('msg'));
+      var sel = window.getSelection(); sel.removeAllRanges(); sel.addRange(r);
+    } catch (e) {}
+  }
+  function legacyCopy(text) {
+    var ta = document.createElement('textarea');
+    ta.value = text; ta.setAttribute('readonly', '');
+    ta.style.position = 'fixed'; ta.style.top = '0'; ta.style.left = '-9999px'; ta.style.fontSize = '16px';
+    document.body.appendChild(ta);
+    ta.select();
+    try { ta.setSelectionRange(0, text.length); } catch (e) {}
+    var ok = false;
+    try { ok = document.execCommand('copy'); } catch (e2) { ok = false; }
+    document.body.removeChild(ta);
+    return ok;
+  }
+  function copyDone(ok) {
+    if (ok) {
+      copyStatus.textContent = 'コピーしました。ハハロルオンラインクリニックのトークに貼り付けて送信してください。';
+    } else {
+      selectMsg();
+      copyStatus.textContent = 'コピーできませんでした。上の枠の文を長押しして「すべて選択」からコピーしてください。';
+    }
+  }
+  $('copyBtn').addEventListener('click', function () {
+    var text = $('msg').textContent;
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+      navigator.clipboard.writeText(text).then(function () { copyDone(true); }, function () { copyDone(legacyCopy(text)); });
+    } else {
+      copyDone(legacyCopy(text));
+    }
+  });
+
+  /* ---------- 開始 ---------- */
+  $('s2hint').textContent = FLOW_INPUT;
+  $('ctaGuide').textContent = 'ボタンを押すと、ハハロルオンラインクリニックのLINEトークが開き、下の文が入力欄に入ります。文は変えずに、右下の送信ボタン(紙飛行機のマーク)を押してください。' + FLOW_LINE;
+  buildModeButtons();
+  state.mode = modeFromUrl();
+  var hs = history.state || {};
+  histIndex = hs.i || 0;
+  if (state.mode) {
+    state.s0i = typeof hs.s0i === 'number' ? hs.s0i : null;
+    if (typeof hs.c === 'number' && hs.c >= 1 && hs.c <= CONCERNS.length) state.concern = hs.c;
+    for (var k = 0; k < TIMES.length; k++) if (TIMES[k].v === hs.t) state.time = hs.t;
+  }
+  buildOptions();
+  // 別のページから戻って読み込み直しになった場合も、選んだところから再開する(電話番号は入れ直し)
+  go(state.mode ? (typeof hs.step === 'number' && hs.step >= 1 ? hs.step : 1) : 0, 'init');
+})();
+</script>
+</body>
+</html>
