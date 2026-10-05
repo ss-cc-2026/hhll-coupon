@@ -8,9 +8,9 @@
 <meta name="format-detection" content="telephone=no">
 <meta name="color-scheme" content="only light">
 <meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'unsafe-inline'; style-src 'unsafe-inline'; img-src data:; connect-src https://docs.google.com; form-action 'none'; base-uri 'none'">
-<title>クーポンのご案内 | ハハロルオンラインクリニック</title>
+<title>初回クーポンアンケート | ハハロルオンラインクリニック</title>
 <link rel="icon" href="data:,">
-<!-- クーポン案内ページ(ハハロルオンラインクリニック) -->
+<!-- 初回クーポンアンケート(ハハロルオンラインクリニック) -->
 <style>
   :root {
     --cream: #FFF6EC; --green: #1F6F6B; --green-dark: #17534F; --green-soft: #E4F0EE;
@@ -36,13 +36,25 @@
   /* 見出しの副題(クーポンの中身。打消しの条件をこの直下に置く) */
   .sub { font-size: 20px; font-weight: 700; line-height: 1.5; color: var(--coral-ink); margin: 0 0 8px; }
   .sub span { display: inline-block; }
-  /* 見出し直下の条件(全ステップで常に表示) */
+  /* 見出し直下の条件(全ステップで常に表示)。最初の表示は全文、次の画面からは常に見せる条件(.cond-sum: 総額・2ヶ月目以降の価格・定期契約)を残して残り(.cond-more)をたたむ */
   .cond {
     margin: 0 0 10px; padding: 10px 12px; border: 2px solid var(--line); border-left: 6px solid var(--coral-strong); border-radius: 10px;
     background: #fff; color: var(--ink); font-size: 16px; line-height: 1.65; text-align: left;
   }
-  .cond span { display: block; padding-left: 1em; text-indent: -1em; }
-  .cond span + span { margin-top: 4px; }
+  .cond .ln { display: block; padding-left: 1em; text-indent: -1em; }
+  .cond .ln + .ln { margin-top: 4px; }
+  /* 金額・「3ヶ月」などの途中で改行しない(見出し直下の条件と、確認の画面の条件の両方で使う) */
+  .nw { white-space: nowrap; }
+  .cond-sum { font-weight: 700; }
+  .cond-more { margin-top: 4px; }
+  .cond-toggle {
+    display: flex; align-items: center; justify-content: center; gap: 10px; width: 100%; min-height: 48px; margin-top: 8px; padding: 8px 12px;
+    border: 2px solid var(--green); border-radius: 10px; background: #fff; color: var(--green);
+    font: inherit; font-size: 17px; font-weight: 700; line-height: 1.4; cursor: pointer;
+  }
+  .cond-toggle:active { background: var(--green-soft); }
+  .cond-toggle .chev { flex: none; width: 10px; height: 10px; border-right: 3px solid currentColor; border-bottom: 3px solid currentColor; transform: translateY(-3px) rotate(45deg); }
+  .cond-toggle[aria-expanded="true"] .chev { transform: translateY(3px) rotate(-135deg); }
   .lead { font-size: 16px; color: var(--sub); }
 
   .progress { margin-bottom: 12px; }
@@ -184,9 +196,13 @@
 <div class="wrap" id="wrap">
   <header class="hero">
     <p class="brand">ハハロルオンラインクリニック</p>
-    <h1 id="title"><span>クーポンのご案内</span></h1>
+    <h1 id="title"><span>初回クーポンアンケート</span></h1>
     <p class="sub" id="sub" hidden></p>
-    <p class="cond" id="cond">※自由診療です。クーポンの対象・ご利用条件は診療ごとに異なります。選んだあとの画面でご確認ください。</p>
+    <div class="cond" id="cond">
+      <p class="cond-sum" id="condSum"><span class="ln">※自由診療です。クーポンの対象・ご利用条件は診療ごとに異なります。選んだあとの画面でご確認ください。</span></p>
+      <button type="button" class="cond-toggle" id="condToggle" aria-expanded="false" aria-controls="condMore" hidden><span id="condToggleT">ご利用条件をすべて見る</span><span class="chev" aria-hidden="true"></span></button>
+      <div class="cond-more" id="condMore" hidden></div>
+    </div>
     <p class="lead" id="lead">ご希望の診療をお選びください。</p>
   </header>
 
@@ -301,7 +317,7 @@
   // 受付への送信先(Googleフォームの formResponse と、送信内容のJSONを入れる段落欄の entry)。どちらかが '' のあいだは何も送らない
   var FORM_ACTION = 'https://docs.google.com/forms/d/e/1FAIpQLSeZxWdJjPheOwWr5KdIcQEOeiv9RO_j6GPp0oO4AGr6bITg3w/formResponse';
   var FORM_ENTRY = 'entry.1217027792';
-  var PAGE_V = '2026-10-06.1';
+  var PAGE_V = '2026-10-06.2';
 
   var OA_ID = '@837mhqha';
   var HOURS = '毎日10:00〜20:00(土日祝も)';
@@ -309,15 +325,19 @@
   var FLOW_INPUT = '入力のあと「確認へ進む」を押すと、入力内容が受付担当に届き、カウンセラーからクーポンとご予約の手続きについてお電話します。最後にLINEで送信すると、クーポンのご案内がLINEに届きます。';
   // ステップ3(LINEへ)で出す説明(ボタンの前に1回だけ)
   var FLOW_LINE = 'LINEで送信すると、すぐにLINEでクーポンのご案内が届き、お申し込みの控えになります。カウンセラーからのお電話は' + HOURS + 'におかけします。';
-  // enabled が true で、cond(見出し直下の条件)と costNote(費用の注記)が入っている診療だけを表示する。それ以外は ?m= で開いても選択画面になる
-  // title = 見出し(h1)、sub = 見出しの副題(クーポンの中身)、cond = 副題の直下の条件(\n で行を分ける)
+  // enabled が true で、summary・cond(見出し直下の条件)と costNote(費用の注記)が入っている診療だけを表示する。それ以外は ?m= で開いても選択画面になる
+  // title = 見出し(h1)、sub = 見出しの副題(クーポンの中身)、
+  // summary = 副題の直下に常に見せる条件(\n で行を分ける。2行まで。総額・2ヶ月目以降(AGA は2回目以降)の価格と、MD は定期契約・3ヶ月では終了しない・途中解約の精算。
+  //   特典の文字の近くに、総額・2ヶ月目以降の価格・解約の条件を置く。たたんでも隠さない)
+  // cond = 残りの条件(\n で行を分ける。診療を選んだ最初の画面では全文、次の画面からはたたんで「ご利用条件をすべて見る」で開く)
+  // ctaCond = 確認の画面の条件(常に表示。MD は初回限定(毎月各先着30名様限定)・総額・2ヶ月目以降の価格・定期契約の期間・3ヶ月では終了しない・途中解約の精算を必ず入れる)
   var MODES = {
     aga: {
       enabled: false,
       title: ['AGA(薄毛)治療', '初回クーポン'], sub: '90日分のうち1ヶ月分が無料(約33%OFF)',
-      topic: 'AGA(薄毛)治療', key: '#初月無料クーポン申込_AGA',
-      cond: '※自由診療・税込・初回購入限定。90日分のお薬をまとめてお届けし、初回はそのうち1ヶ月分が無料(約33%OFF)です。\n' +
-        '※初回のお支払い6,480円〜(通常9,720円〜・お薬により異なります)。2回目以降は通常価格です。\n' +
+      topic: 'AGA(薄毛)治療', key: '#初回クーポン申込_AGA',
+      summary: '※90日分のうち1ヶ月分が無料(約33%OFF)・初回のお支払い6,480円〜(通常9,720円〜)。2回目以降は通常価格です。',
+      cond: '※自由診療・税込・初回購入限定。90日分のお薬をまとめてお届けします。お支払いの金額はお薬により異なります。\n' +
         '※対象は1種類のお薬の90日分です(2種類のセットは確認中)。詳しい条件はLINEでご案内します。',
       ctaCond: '※自由診療・税込・初回購入限定。90日分のうち1ヶ月分が無料(約33%OFF)で、初回のお支払いは6,480円〜(通常9,720円〜・お薬により異なります)。2回目以降は通常価格です。詳しいご利用条件は、LINEで送信したあと、LINEでご案内します。',
       target: '※このLINEで初めてお薬をご購入される方(初回購入限定)が対象です。',
@@ -327,12 +347,12 @@
     md: {
       enabled: true,
       title: ['メディカルダイエット', '初回クーポン'], sub: '注射は初月0円・飲み薬は初月半額',
-      topic: 'メディカルダイエット', key: '#初月無料クーポン申込_MD',
-      cond: '※毎月お届けの定期コース(最低3ヶ月)。最初の3ヶ月の総額: 飲み薬 26,125円〜/注射 65,560円〜\n' +
-        '※2ヶ月目以降は通常価格: 飲み薬 月10,450円/注射 月32,780円〜\n' +
-        '※自由診療・税込・初回限定(毎月各先着30名様限定)。毎月更新の定期契約(最大12ヶ月)で、3ヶ月では終了しません。\n' +
-        '※3ヶ月未満の途中解約は初月割引分を精算します(医師判断の中止を除く)。4ヶ月目以降はいつでも解約できます。',
-      ctaCond: '※自由診療・税込。注射は初月0円・飲み薬は初月半額で、最初の3ヶ月の総額は 飲み薬 26,125円〜/注射 65,560円〜です(毎月お届けの定期コース・最低3ヶ月)。解約の方法など詳しいご利用条件は、LINEで送信したあと、LINEでご案内します。',
+      topic: 'メディカルダイエット', key: '#初回クーポン申込_MD',
+      summary: '※最初の3ヶ月の総額: 飲み薬 26,125円〜/注射 65,560円〜。2ヶ月目以降は通常価格(飲み薬 月10,450円/注射 月32,780円〜)です。\n' +
+        '※毎月更新の定期契約(最低3ヶ月・最大12ヶ月)で、3ヶ月では終了しません。3ヶ月未満の途中解約は初月割引分を精算します(医師判断の中止を除く)。',
+      cond: '※自由診療・税込・初回限定(毎月各先着30名様限定)。\n' +
+        '※4ヶ月目以降はいつでも解約できます(精算はありません)。',
+      ctaCond: '※自由診療・税込・初回限定(毎月各先着30名様限定)。注射は初月0円・飲み薬は初月半額で、最初の3ヶ月の総額は 飲み薬 26,125円〜/注射 65,560円〜です。2ヶ月目以降は通常価格(飲み薬 月10,450円/注射 月32,780円〜)です。毎月更新の定期契約(最低3ヶ月・最大12ヶ月)で、3ヶ月では終了しません。3ヶ月未満の途中解約は初月割引分を精算します(医師判断の中止を除く)。解約の方法など詳しいご利用条件は、LINEで送信したあと、LINEでご案内します。',
       target: '※当院で初めてメディカルダイエットの診察を受ける方が対象です。',
       noRx: '※お薬の処方の可否は医師が診察で判断します。処方に至らない場合、費用はかかりません。',
       costNote: '※費用(2ヶ月目以降を含む総額)と主なリスク・副作用は、LINEでご案内し、診察で医師がご説明します。'
@@ -380,7 +400,7 @@
   var bars = document.querySelectorAll('.bar span');
 
   function isOn(m) {
-    return Object.prototype.hasOwnProperty.call(MODES, m) && MODES[m].enabled === true && !!MODES[m].cond && !!MODES[m].costNote;
+    return Object.prototype.hasOwnProperty.call(MODES, m) && MODES[m].enabled === true && !!MODES[m].summary && !!MODES[m].cond && !!MODES[m].costNote;
   }
 
   /* ---------- 電話番号: 全角/半角・ハイフン有無を受け付け、日本の携帯(11桁)/固定(10桁)だけ通す ---------- */
@@ -533,7 +553,7 @@
     var m = state.mode ? MODES[state.mode] : null;
     var title = $('title');
     title.textContent = '';
-    (m ? m.title : ['クーポンのご案内']).forEach(function (t, i) {
+    (m ? m.title : ['初回クーポンアンケート']).forEach(function (t, i) {
       if (i) title.appendChild(document.createTextNode(' '));
       var sp = document.createElement('span'); sp.textContent = t; title.appendChild(sp);
     });
@@ -547,12 +567,7 @@
         var sp = document.createElement('span'); sp.textContent = t; sub.appendChild(sp);
       });
     }
-    // 条件は \n ごとに1行(行頭の※をそろえる)
-    var cond = $('cond');
-    cond.textContent = '';
-    String(m ? m.cond : COND_NONE).split('\n').forEach(function (t) {
-      var sp = document.createElement('span'); sp.textContent = t; cond.appendChild(sp);
-    });
+    paintCond(step);
     var lead = $('lead');
     lead.textContent = m ? 'かんたんな3ステップ(約1分)です。' : 'ご希望の診療をお選びください。';
     lead.hidden = step >= 2;
@@ -562,6 +577,61 @@
     var list = m ? NOTES_COMMON_HEAD.concat([m.target, m.noRx, NOTES_COUPON, m.costNote], NOTES_COMMON_TAIL)
       : NOTES_COMMON_HEAD.concat([NOTES_COUPON, COST_NOTE_NONE], NOTES_COMMON_TAIL);
     list.forEach(function (t) { var li = document.createElement('li'); li.textContent = t; notes.appendChild(li); });
+  }
+  /* ---------- 見出し直下の条件(診療を選んだ最初の画面は全文。次の画面からは summary(総額・2ヶ月目以降の価格・定期契約)を残してたたむ) ---------- */
+  // 「1回見た」はこのページのメモリにだけ持つ(端末・ブラウザの履歴・URLには入れない)。ステップ1で読み込み直すと全文に戻る
+  var condSeen = {}, condOpen = false, condIsFolded = false;
+  // true = summary(常に見せる条件)だけを見せ、残り(cond)は「ご利用条件をすべて見る」で開く
+  // ステップ2以降に進んだ診療は、ステップ1に戻ってもたたむ。別の診療は、その診療の最初の表示を全文にする
+  function condFolded(step, mode) {
+    if (!mode) return false;
+    if (step >= 2) condSeen[mode] = true;
+    return step >= 2 || condSeen[mode] === true;
+  }
+  // 金額(「26,125円〜」「月10,450円」「初月0円」)と「最低3ヶ月」「2ヶ月目」「90日分」「30名様」の途中では改行しない(.nw に入れる)
+  var NOBREAK = /((?:初?月)?[0-9][0-9,]*円〜?|(?:最低|最大)?[0-9]+(?:ヶ月[目分]?|日分|名様))/;
+  function appendNoBreak(el, text) {
+    String(text || '').split(NOBREAK).forEach(function (part, i) {
+      if (!part) return;
+      if (i % 2) { var nw = document.createElement('span'); nw.className = 'nw'; nw.textContent = part; el.appendChild(nw); }
+      else el.appendChild(document.createTextNode(part));
+    });
+  }
+  // \n ごとに1行(行頭の※をそろえる)
+  function fillLines(el, text) {
+    el.textContent = '';
+    String(text || '').split('\n').forEach(function (t) {
+      if (!t) return;
+      var sp = document.createElement('span'); sp.className = 'ln';
+      appendNoBreak(sp, t);
+      el.appendChild(sp);
+    });
+  }
+  // 確認の画面の条件(ctaCond)は1段落。行頭の .ln は付けず、金額などの途中で改行しないことだけそろえる
+  function fillPara(el, text) {
+    el.textContent = '';
+    appendNoBreak(el, text);
+  }
+  function paintCondOpen() {
+    var more = $('condMore'), tg = $('condToggle');
+    more.hidden = !more.firstChild || (condIsFolded && !condOpen);
+    tg.hidden = !condIsFolded;
+    tg.setAttribute('aria-expanded', condIsFolded && condOpen ? 'true' : 'false');
+    $('condToggleT').textContent = condIsFolded && condOpen ? 'ご利用条件を閉じる' : 'ご利用条件をすべて見る';
+  }
+  // 画面を切り替えるたびに呼ぶ(開いていた条件も、次の画面ではたたんだ状態に戻す)
+  function paintCond(step) {
+    var m = state.mode ? MODES[state.mode] : null;
+    fillLines($('condSum'), m ? m.summary : COND_NONE);
+    fillLines($('condMore'), m ? m.cond : '');
+    condIsFolded = condFolded(step, state.mode);
+    condOpen = false;
+    paintCondOpen();
+  }
+  function toggleCond() {
+    if (!condIsFolded) return;
+    condOpen = !condOpen;
+    paintCondOpen();
   }
   function resetCta() {
     ctaEl.classList.remove('is-busy');
@@ -575,7 +645,7 @@
     $('sumConcern').textContent = c.label;
     $('sumTel').textContent = state.phone;
     $('sumTime').textContent = t.label + (t.note ? '(' + t.note + ')' : '');
-    $('ctaCond').textContent = MODES[state.mode].ctaCond;
+    fillPara($('ctaCond'), MODES[state.mode].ctaCond);
     var msg = buildMessage();
     $('msg').textContent = msg;
     ctaEl.href = lineUrl(msg);
@@ -699,6 +769,7 @@
     go(2, 'push');
   });
   $('back1').addEventListener('click', backToSelect);
+  $('condToggle').addEventListener('click', toggleCond);
   telEl.addEventListener('blur', function () {
     var p = parsePhone(telEl.value);
     if (p.ok) { telEl.value = p.value; telEl.removeAttribute('aria-invalid'); }
