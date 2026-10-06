@@ -33,28 +33,26 @@
   .brand { font-size: 16px; font-weight: 700; color: var(--green); letter-spacing: .04em; }
   h1 { color: var(--green); font-size: 26px; line-height: 1.4; margin: 6px 0 8px; }
   h1 span { display: inline-block; }
-  /* 見出しの副題(クーポンの中身。打消しの条件をこの直下に置く) */
-  .sub { font-size: 20px; font-weight: 700; line-height: 1.5; color: var(--coral-ink); margin: 0 0 8px; }
+  /* 見出しの副題(クーポンの中身。総額などの1行をこの直下に置く) */
+  .sub { font-size: 20px; font-weight: 700; line-height: 1.5; color: var(--coral-ink); margin: 0 0 6px; }
   .sub span { display: inline-block; }
-  /* 見出し直下の条件(全ステップで常に表示)。最初の表示は全文、次の画面からは常に見せる条件(.cond-sum: 総額・2ヶ月目以降の価格・定期契約)を残して残り(.cond-more)をたたむ */
-  .cond {
-    margin: 0 0 10px; padding: 10px 12px; border: 2px solid var(--line); border-left: 6px solid var(--coral-strong); border-radius: 10px;
+  /* 副題の直下の1行(総額など。全ステップで常に表示)。区切りのところでだけ折り返す */
+  .sum { margin: 0; font-size: 14px; font-weight: 700; line-height: 1.6; color: var(--ink); text-wrap: balance; }
+  .ph { display: inline-block; }
+  /* 金額・「3ヶ月」などの途中で改行しない(見出し直下の1行と、最下部のクーポン内訳で使う) */
+  .nw { white-space: nowrap; }
+  /* 最下部のクーポン内訳へのリンク */
+  .detail-link-row { margin: 0 0 6px; font-size: 13px; line-height: 1.4; }
+  .detail-link {
+    display: inline-flex; align-items: center; min-height: 44px; padding: 0 12px;
+    color: var(--green-dark); font-weight: 700; text-decoration: underline; text-underline-offset: 3px;
+  }
+  /* 診療を選ぶ前の画面の枠 */
+  .pick-note {
+    margin: 16px 0 0; padding: 10px 12px; border: 2px solid var(--line); border-left: 6px solid var(--coral-strong); border-radius: 10px;
     background: #fff; color: var(--ink); font-size: 16px; line-height: 1.65; text-align: left;
   }
-  .cond .ln { display: block; padding-left: 1em; text-indent: -1em; }
-  .cond .ln + .ln { margin-top: 4px; }
-  /* 金額・「3ヶ月」などの途中で改行しない(見出し直下の条件と、確認の画面の条件の両方で使う) */
-  .nw { white-space: nowrap; }
-  .cond-sum { font-weight: 700; }
-  .cond-more { margin-top: 4px; }
-  .cond-toggle {
-    display: flex; align-items: center; justify-content: center; gap: 10px; width: 100%; min-height: 48px; margin-top: 8px; padding: 8px 12px;
-    border: 2px solid var(--green); border-radius: 10px; background: #fff; color: var(--green);
-    font: inherit; font-size: 17px; font-weight: 700; line-height: 1.4; cursor: pointer;
-  }
-  .cond-toggle:active { background: var(--green-soft); }
-  .cond-toggle .chev { flex: none; width: 10px; height: 10px; border-right: 3px solid currentColor; border-bottom: 3px solid currentColor; transform: translateY(-3px) rotate(45deg); }
-  .cond-toggle[aria-expanded="true"] .chev { transform: translateY(3px) rotate(-135deg); }
+  .pick-link { margin: 4px 0 0; text-align: center; }
   .lead { font-size: 16px; color: var(--sub); }
 
   .progress { margin-bottom: 12px; }
@@ -147,7 +145,6 @@
   }
   .cta-card { background: var(--green); color: #fff; text-align: center; border-radius: 16px; padding: 20px 16px; }
   .cta-card > p { font-size: 17px; margin-bottom: 14px; text-align: left; }
-  .cta-card > p.cta-cond { font-size: 16px; margin-bottom: 10px; padding-bottom: 10px; border-bottom: 1px solid rgba(255,255,255,.45); }
   .msg-fig { margin-bottom: 16px; text-align: left; }
   .msg-label { font-size: 16px; font-weight: 700; margin-bottom: 6px; color: #fff; }
   .msg {
@@ -156,13 +153,15 @@
     -webkit-user-select: text; user-select: text;
   }
   .done-note { margin-bottom: 12px; padding: 12px 14px; border-radius: 12px; background: #fff; color: var(--ink); font-size: 17px; font-weight: 700; line-height: 1.7; text-align: left; border-left: 6px solid var(--coral-strong); }
+  /* LINEのボタン(LINEの緑・白の太字) */
   .cta {
-    display: block; min-height: 64px; padding: 14px 16px; border-radius: 999px; background: var(--coral-strong); color: #fff;
-    text-decoration: none; font-size: 20px; font-weight: 700; line-height: 1.5; box-shadow: 0 3px 0 rgba(0,0,0,.18);
+    display: flex; align-items: center; justify-content: center; min-height: 56px; padding: 10px 16px; border-radius: 999px; background: #06C755; color: #fff;
+    text-decoration: none; font-size: 20px; font-weight: 700; line-height: 1.4; box-shadow: 0 3px 0 rgba(0,0,0,.18);
   }
-  .cta small { display: block; font-size: 16px; font-weight: 400; }
   .cta.is-busy { opacity: .75; }
   .cta:focus-visible { outline: 3px solid #fff; outline-offset: 3px; }
+  /* ボタンのすぐ下の補足(小さい文字) */
+  .cta-card > p.cta-note { margin: 6px 0 0; font-size: 8px; line-height: 1.5; text-align: center; color: #fff; }
   .cta-hint { margin-top: 14px; padding: 12px 14px; border-radius: 12px; background: #fff; color: var(--ink); font-size: 17px; line-height: 1.7; text-align: left; }
   .cta-hint:empty { display: none; }
   .copy-area { margin-top: 18px; padding-top: 14px; border-top: 1px solid rgba(255,255,255,.45); text-align: left; }
@@ -175,12 +174,36 @@
   .btn-copy:focus-visible { outline: 3px solid #fff; outline-offset: 3px; }
   .copy-status { margin-top: 8px; padding: 10px 12px; border-radius: 10px; background: #fff; color: var(--ink); }
   .copy-status:empty { display: none; }
+  /* LINEでの送り方の説明(LINEのボタンとコピーの下) */
+  .cta-card > p.cta-guide { margin: 16px 0 0; padding-top: 14px; border-top: 1px solid rgba(255,255,255,.45); font-size: 17px; line-height: 1.7; text-align: left; }
 
-  /* 注記 */
-  .notes { margin-top: 24px; font-size: 16px; color: var(--sub); }
+  /* 最下部: クーポン内訳・注記・送信と保存について・運営者 */
+  .notes { margin-top: 24px; font-size: 13px; line-height: 1.7; color: var(--sub); }
   .notes ul { list-style: none; }
   .notes li { padding-left: 1em; text-indent: -1em; margin-bottom: 6px; }
-  .privacy-note { margin-top: 14px; padding: 12px 14px; border-radius: 12px; background: #fff; }
+  .detail { margin-bottom: 18px; padding: 2px 14px; border: 2px solid var(--line); border-radius: 12px; background: #fff; color: var(--ink); scroll-margin-top: 12px; }
+  .detail-h { font-size: 16px; line-height: 1.5; color: var(--green); margin: 0; }
+  /* クーポン内訳の開閉(最初はたたむ。「クーポン内訳はこちら」で開く) */
+  .detail-toggle {
+    display: flex; align-items: center; justify-content: space-between; gap: 10px; width: 100%; min-height: 44px; padding: 8px 0;
+    border: 0; background: none; color: var(--green-dark); font: inherit; font-size: 16px; font-weight: 700; line-height: 1.4; text-align: left; cursor: pointer;
+  }
+  .detail-toggle .chev { flex: none; width: 9px; height: 9px; border-right: 3px solid currentColor; border-bottom: 3px solid currentColor; transform: translateY(-3px) rotate(45deg); }
+  .detail-toggle[aria-expanded="true"] .chev { transform: translateY(3px) rotate(-135deg); }
+  .detail-body { padding-bottom: 12px; }
+  .detail-sub { font-size: 14px; line-height: 1.5; color: var(--green); margin: 10px 0 2px; }
+  .detail ul { list-style: none; font-size: 14px; line-height: 1.7; }
+  .detail li { position: relative; padding-left: 1em; text-indent: 0; margin-bottom: 0; }
+  .detail li::before { content: "\30FB"; position: absolute; left: 0; }
+  .detail li + li { margin-top: 4px; }
+  .priv-toggle {
+    display: flex; align-items: center; justify-content: space-between; gap: 10px; width: 100%; min-height: 44px; margin-top: 14px; padding: 8px 12px;
+    border: 2px solid var(--line-strong); border-radius: 10px; background: #fff; color: var(--green-dark);
+    font: inherit; font-size: 14px; font-weight: 700; line-height: 1.4; text-align: left; cursor: pointer;
+  }
+  .priv-toggle .chev { flex: none; width: 9px; height: 9px; border-right: 3px solid currentColor; border-bottom: 3px solid currentColor; transform: translateY(-3px) rotate(45deg); }
+  .priv-toggle[aria-expanded="true"] .chev { transform: translateY(3px) rotate(-135deg); }
+  .privacy-note { margin-top: 8px; padding: 12px 14px; border-radius: 12px; background: #fff; }
   .operator { margin-top: 14px; }
   .operator a { display: inline-flex; align-items: center; min-height: 48px; color: var(--green); font-weight: 700; text-underline-offset: 3px; word-break: break-all; }
 
@@ -198,11 +221,8 @@
     <p class="brand">ハハロルオンラインクリニック</p>
     <h1 id="title"><span>初回クーポンアンケート</span></h1>
     <p class="sub" id="sub" hidden></p>
-    <div class="cond" id="cond">
-      <p class="cond-sum" id="condSum"><span class="ln">※自由診療です。クーポンの対象・ご利用条件は診療ごとに異なります。選んだあとの画面でご確認ください。</span></p>
-      <button type="button" class="cond-toggle" id="condToggle" aria-expanded="false" aria-controls="condMore" hidden><span id="condToggleT">ご利用条件をすべて見る</span><span class="chev" aria-hidden="true"></span></button>
-      <div class="cond-more" id="condMore" hidden></div>
-    </div>
+    <p class="sum" id="sum" hidden></p>
+    <p class="detail-link-row" id="detailLinkRow" hidden><a class="detail-link" id="detailLink" href="#coupon-detail">クーポン内訳はこちら</a></p>
     <p class="lead" id="lead">ご希望の診療をお選びください。</p>
   </header>
 
@@ -219,9 +239,11 @@
       <h2 id="h0" tabindex="-1">どちらかお選びください</h2>
       <p class="hint" id="h0hint">クーポンの種類を選んでください。</p>
       <div class="modes">
-        <button type="button" class="mode" data-mode="aga"><strong>AGA(薄毛)治療</strong><span>男性の薄毛のご相談</span></button>
+        <button type="button" class="mode" data-mode="aga"><strong>AGA(薄毛)治療</strong><span>薄毛のご相談</span></button>
         <button type="button" class="mode" data-mode="md"><strong>メディカルダイエット</strong><span>体重管理のご相談</span></button>
       </div>
+      <p class="pick-note" id="pickNote">※クーポンの対象・ご利用条件は診療ごとに異なります。選んだあとの画面でご確認ください。</p>
+      <p class="detail-link-row pick-link"><a class="detail-link" id="detailLink0" href="#coupon-detail">クーポン内訳はこちら</a></p>
     </section>
 
     <!-- 1 気になっていること -->
@@ -275,30 +297,35 @@
         <div><dt>お電話の希望の時間帯</dt><dd><span id="sumTime"></span><button type="button" class="link-btn" data-goto="2" aria-label="希望の時間帯を変更">変更</button></dd></div>
       </dl>
       <div class="cta-card">
-        <p class="cta-cond" id="ctaCond"></p>
-        <p id="ctaGuide"></p>
         <figure class="msg-fig" aria-labelledby="msgLabel">
           <figcaption class="msg-label" id="msgLabel">LINEのトークに、次の文が入ります</figcaption>
           <pre class="msg" id="msg" translate="no"></pre>
         </figure>
         <p class="done-note" id="doneNote" role="status" hidden>LINEで送信できた方は、これで完了です。このページは閉じてかまいません。</p>
-        <a class="cta" id="cta" href="#"><span id="ctaMain">LINEでクーポンのご案内を受け取る</span><small>LINEのトーク画面が開きます。クーポンはお支払いのときに当院で適用します</small></a>
+        <a class="cta" id="cta" href="#" aria-describedby="ctaNote"><span id="ctaMain">LINEでクーポンを受け取る</span></a>
+        <p class="cta-note" id="ctaNote"><span class="ph">LINEのトーク画面が開きます。</span><span class="ph">クーポンはお支払いのときに当院で適用します</span></p>
         <p class="cta-hint" id="ctaHint" role="status" aria-live="polite"></p>
         <div class="copy-area">
           <p class="copy-title">LINEが開かないときは</p>
-          <button type="button" class="btn-copy" id="copyBtn">文をコピーする</button>
+          <button type="button" class="btn-copy" id="copyBtn">コピーする</button>
           <p>コピーしたら、ハハロルオンラインクリニックのトークに貼り付けて送信してください。</p>
           <p class="copy-status" id="copyStatus" role="status" aria-live="polite"></p>
         </div>
+        <p class="cta-guide" id="ctaGuide"></p>
       </div>
       <button type="button" class="btn-back" data-back>戻る</button>
     </section>
   </main>
 
   <aside class="notes" aria-label="ご確認ください">
+    <section class="detail" id="coupon-detail" aria-labelledby="detailToggle">
+      <h2 class="detail-h"><button type="button" class="detail-toggle" id="detailToggle" aria-expanded="false" aria-controls="detailBody"><span>クーポン内訳(価格・ご利用条件)</span><span class="chev" aria-hidden="true"></span></button></h2>
+      <div class="detail-body" id="detailBody" hidden></div>
+    </section>
     <ul id="notes"></ul>
-    <p class="privacy-note">「確認へ進む」を押した時点で、入力内容(ご希望の診療・気になっていること・電話番号・希望の時間帯)が受付担当(社内の連絡ツール)に送信されます。送信にはGoogleのサービス(Googleフォーム)を使います。お電話番号は端末に保存しません(ページを開いている間だけ使います)。画面を戻ったときに続きから選べるよう、選んだ項目の番号だけをブラウザの履歴に持ちます。</p>
-    <p class="operator">診療を行う医療機関: ハハロルオンラインクリニック(提携医療機関)<br>本ページの運営: 超楽長寿株式会社<br>お問い合わせ: <a href="mailto:support-clinic@hhll.tech">support-clinic@hhll.tech</a></p>
+    <button type="button" class="priv-toggle" id="privToggle" aria-expanded="false" aria-controls="privNote"><span>送信と保存について</span><span class="chev" aria-hidden="true"></span></button>
+    <p class="privacy-note" id="privNote" hidden>「確認へ進む」を押した時点で、入力内容(ご希望の診療・気になっていること・電話番号・希望の時間帯)が受付担当(社内の連絡ツール)に送信されます。送信にはGoogleのサービス(Googleフォーム)を使います。お電話番号は端末に保存しません(ページを開いている間だけ使います)。画面を戻ったときに続きから選べるよう、選んだ項目の番号だけをブラウザの履歴に持ちます。</p>
+    <p class="operator">診療を行う医療機関: ハハロルオンラインクリニック(提携医療機関)<br>本ページの運営: 超楽長寿株式会社<br>お問い合わせ: <a href="mailto:support@hhll.tech">support@hhll.tech</a><br><a href="https://hhll.app/clinic/privacypolicy/" target="_blank" rel="noopener noreferrer">プライバシーポリシー(別のページが開きます)</a></p>
   </aside>
 </div>
 
@@ -317,29 +344,32 @@
   // 受付への送信先(Googleフォームの formResponse と、送信内容のJSONを入れる段落欄の entry)。どちらかが '' のあいだは何も送らない
   var FORM_ACTION = 'https://docs.google.com/forms/d/e/1FAIpQLSeZxWdJjPheOwWr5KdIcQEOeiv9RO_j6GPp0oO4AGr6bITg3w/formResponse';
   var FORM_ENTRY = 'entry.1217027792';
-  var PAGE_V = '2026-10-06.2';
+  var PAGE_V = '2026-10-06.3';
 
   var OA_ID = '@837mhqha';
   var HOURS = '毎日10:00〜20:00(土日祝も)';
   // 入力の前に出す流れの説明(ステップ2の電話番号欄の上)
   var FLOW_INPUT = '入力のあと「確認へ進む」を押すと、入力内容が受付担当に届き、カウンセラーからクーポンとご予約の手続きについてお電話します。最後にLINEで送信すると、クーポンのご案内がLINEに届きます。';
-  // ステップ3(LINEへ)で出す説明(ボタンの前に1回だけ)
+  // ステップ3(LINEへ)で出す説明(LINEのボタンとコピーの下に1回だけ)
   var FLOW_LINE = 'LINEで送信すると、すぐにLINEでクーポンのご案内が届き、お申し込みの控えになります。カウンセラーからのお電話は' + HOURS + 'におかけします。';
-  // enabled が true で、summary・cond(見出し直下の条件)と costNote(費用の注記)が入っている診療だけを表示する。それ以外は ?m= で開いても選択画面になる
+  // enabled が true で、summary・detail(クーポン内訳)と costNote(費用の注記)が入っている診療だけを表示する。それ以外は ?m= で開いても選択画面になる
   // title = 見出し(h1)、sub = 見出しの副題(クーポンの中身)、
-  // summary = 副題の直下に常に見せる条件(\n で行を分ける。2行まで。総額・2ヶ月目以降(AGA は2回目以降)の価格と、MD は定期契約・3ヶ月では終了しない・途中解約の精算。
-  //   特典の文字の近くに、総額・2ヶ月目以降の価格・解約の条件を置く。たたんでも隠さない)
-  // cond = 残りの条件(\n で行を分ける。診療を選んだ最初の画面では全文、次の画面からはたたんで「ご利用条件をすべて見る」で開く)
-  // ctaCond = 確認の画面の条件(常に表示。MD は初回限定(毎月各先着30名様限定)・総額・2ヶ月目以降の価格・定期契約の期間・3ヶ月では終了しない・途中解約の精算を必ず入れる)
+  // summary = 副題の直下に常に見せる1行(MD は最初の3ヶ月の総額、AGA は初回のお支払いと2回目以降の価格)。すぐ下に「クーポン内訳はこちら」(最下部へ)
+  // detail = 最下部の「クーポン内訳」に出す条件(1項目ずつ。全ステップで表示)
   var MODES = {
     aga: {
-      enabled: false,
+      enabled: true,
       title: ['AGA(薄毛)治療', '初回クーポン'], sub: '90日分のうち1ヶ月分が無料(約33%OFF)',
       topic: 'AGA(薄毛)治療', key: '#初回クーポン申込_AGA',
-      summary: '※90日分のうち1ヶ月分が無料(約33%OFF)・初回のお支払い6,480円〜(通常9,720円〜)。2回目以降は通常価格です。',
-      cond: '※自由診療・税込・初回購入限定。90日分のお薬をまとめてお届けします。お支払いの金額はお薬により異なります。\n' +
-        '※対象は1種類のお薬の90日分です(2種類のセットは確認中)。詳しい条件はLINEでご案内します。',
-      ctaCond: '※自由診療・税込・初回購入限定。90日分のうち1ヶ月分が無料(約33%OFF)で、初回のお支払いは6,480円〜(通常9,720円〜・お薬により異なります)。2回目以降は通常価格です。詳しいご利用条件は、LINEで送信したあと、LINEでご案内します。',
+      summary: '※初回のお支払い6,480円〜(通常9,720円〜・お薬により異なります)。2回目以降は通常価格',
+      detail: [
+        '自由診療・税込・初回購入限定です(このLINEで初めてお薬をご購入される方が対象です)。',
+        '90日分のお薬をまとめてお届けします。90日分のうち1ヶ月分(1/3)が無料(約33%OFF)です。',
+        '初回のお支払いは6,480円〜(通常9,720円〜)です。金額はお薬により異なります。',
+        '2回目以降は通常価格です。',
+        '対象は1種類のお薬の90日分です。2種類のセットは、お電話でご案内します。',
+        '詳しいご利用条件は、LINEでご案内します。'
+      ],
       target: '※このLINEで初めてお薬をご購入される方(初回購入限定)が対象です。',
       noRx: '※お薬の処方の可否は医師が診察で判断します。処方に至らない場合の費用は、お電話でご案内します。',
       costNote: '※費用(2回目以降を含む総額)と主なリスク・副作用は、LINEでご案内し、診察で医師がご説明します。'
@@ -348,17 +378,22 @@
       enabled: true,
       title: ['メディカルダイエット', '初回クーポン'], sub: '注射は初月0円・飲み薬は初月半額',
       topic: 'メディカルダイエット', key: '#初回クーポン申込_MD',
-      summary: '※最初の3ヶ月の総額: 飲み薬 26,125円〜/注射 65,560円〜。2ヶ月目以降は通常価格(飲み薬 月10,450円/注射 月32,780円〜)です。\n' +
-        '※毎月更新の定期契約(最低3ヶ月・最大12ヶ月)で、3ヶ月では終了しません。3ヶ月未満の途中解約は初月割引分を精算します(医師判断の中止を除く)。',
-      cond: '※自由診療・税込・初回限定(毎月各先着30名様限定)。\n' +
-        '※4ヶ月目以降はいつでも解約できます(精算はありません)。',
-      ctaCond: '※自由診療・税込・初回限定(毎月各先着30名様限定)。注射は初月0円・飲み薬は初月半額で、最初の3ヶ月の総額は 飲み薬 26,125円〜/注射 65,560円〜です。2ヶ月目以降は通常価格(飲み薬 月10,450円/注射 月32,780円〜)です。毎月更新の定期契約(最低3ヶ月・最大12ヶ月)で、3ヶ月では終了しません。3ヶ月未満の途中解約は初月割引分を精算します(医師判断の中止を除く)。解約の方法など詳しいご利用条件は、LINEで送信したあと、LINEでご案内します。',
+      summary: '※最初の3ヶ月の総額: 飲み薬 26,125円〜/注射 65,560円〜',
+      detail: [
+        '自由診療・税込・初回限定(毎月各先着30名様限定)です。',
+        '注射は初月0円・飲み薬は初月半額です。',
+        '最初の3ヶ月の総額は、飲み薬 26,125円〜/注射 65,560円〜です。',
+        '2ヶ月目以降は通常価格(飲み薬 月10,450円/注射 月32,780円〜)です。',
+        '毎月更新の定期契約(最低3ヶ月・最大12ヶ月)で、3ヶ月では終了しません。',
+        '3ヶ月未満の途中解約は、初月割引分を精算します(医師判断の中止を除く)。',
+        '4ヶ月目以降は、いつでも解約できます(精算はありません)。',
+        '解約の方法など詳しいご利用条件は、LINEでご案内します。'
+      ],
       target: '※当院で初めてメディカルダイエットの診察を受ける方が対象です。',
       noRx: '※お薬の処方の可否は医師が診察で判断します。処方に至らない場合、費用はかかりません。',
       costNote: '※費用(2ヶ月目以降を含む総額)と主なリスク・副作用は、LINEでご案内し、診察で医師がご説明します。'
     }
   };
-  var COND_NONE = '※自由診療です。クーポンの対象・ご利用条件は診療ごとに異なります。選んだあとの画面でご確認ください。';
   var COST_NOTE_NONE = '※費用(総額)と主なリスク・副作用は、LINEでご案内し、診察で医師がご説明します。';
   var NOTES_COMMON_HEAD = ['※自由診療です。'];
   var NOTES_COUPON = '※クーポンの対象・内容・ご利用条件は、LINEでご案内します。';
@@ -400,7 +435,7 @@
   var bars = document.querySelectorAll('.bar span');
 
   function isOn(m) {
-    return Object.prototype.hasOwnProperty.call(MODES, m) && MODES[m].enabled === true && !!MODES[m].summary && !!MODES[m].cond && !!MODES[m].costNote;
+    return Object.prototype.hasOwnProperty.call(MODES, m) && MODES[m].enabled === true && !!MODES[m].summary && !!(MODES[m].detail && MODES[m].detail.length) && !!MODES[m].costNote;
   }
 
   /* ---------- 電話番号: 全角/半角・ハイフン有無を受け付け、日本の携帯(11桁)/固定(10桁)だけ通す ---------- */
@@ -567,7 +602,13 @@
         var sp = document.createElement('span'); sp.textContent = t; sub.appendChild(sp);
       });
     }
-    paintCond(step);
+    // 副題の直下の1行(総額など)。診療を選ぶ前は枠の注記を出す
+    var sum = $('sum');
+    fillPhrases(sum, m ? m.summary : '');
+    sum.hidden = !(m && m.summary);
+    $('pickNote').hidden = !!m;
+    $('detailLinkRow').hidden = !m;
+    paintDetail();
     var lead = $('lead');
     lead.textContent = m ? 'かんたんな3ステップ(約1分)です。' : 'ご希望の診療をお選びください。';
     lead.hidden = step >= 2;
@@ -578,18 +619,9 @@
       : NOTES_COMMON_HEAD.concat([NOTES_COUPON, COST_NOTE_NONE], NOTES_COMMON_TAIL);
     list.forEach(function (t) { var li = document.createElement('li'); li.textContent = t; notes.appendChild(li); });
   }
-  /* ---------- 見出し直下の条件(診療を選んだ最初の画面は全文。次の画面からは summary(総額・2ヶ月目以降の価格・定期契約)を残してたたむ) ---------- */
-  // 「1回見た」はこのページのメモリにだけ持つ(端末・ブラウザの履歴・URLには入れない)。ステップ1で読み込み直すと全文に戻る
-  var condSeen = {}, condOpen = false, condIsFolded = false;
-  // true = summary(常に見せる条件)だけを見せ、残り(cond)は「ご利用条件をすべて見る」で開く
-  // ステップ2以降に進んだ診療は、ステップ1に戻ってもたたむ。別の診療は、その診療の最初の表示を全文にする
-  function condFolded(step, mode) {
-    if (!mode) return false;
-    if (step >= 2) condSeen[mode] = true;
-    return step >= 2 || condSeen[mode] === true;
-  }
-  // 金額(「26,125円〜」「月10,450円」「初月0円」)と「最低3ヶ月」「2ヶ月目」「90日分」「30名様」の途中では改行しない(.nw に入れる)
-  var NOBREAK = /((?:初?月)?[0-9][0-9,]*円〜?|(?:最低|最大)?[0-9]+(?:ヶ月[目分]?|日分|名様))/;
+  /* ---------- 見出し直下の1行と、最下部のクーポン内訳(全ステップで表示) ---------- */
+  // 金額(「26,125円〜」「月10,450円」「初月0円」)と「最低3ヶ月」「2ヶ月目」「90日分」「30名様」「約33%OFF」の途中では改行しない(.nw に入れる)
+  var NOBREAK = /((?:初?月)?[0-9][0-9,]*円〜?|(?:最低|最大)?[0-9]+(?:ヶ月[目分]?|日分|名様)|約?[0-9]+%OFF)/;
   function appendNoBreak(el, text) {
     String(text || '').split(NOBREAK).forEach(function (part, i) {
       if (!part) return;
@@ -597,45 +629,35 @@
       else el.appendChild(document.createTextNode(part));
     });
   }
-  // \n ごとに1行(行頭の※をそろえる)
-  function fillLines(el, text) {
+  // 「: 」「/」「・」「。」のあとと「(」の前でだけ折り返す(.ph のまとまりごと。金額の途中でも改行しない。区切りの空白はまとまりの外に残す)
+  function fillPhrases(el, text) {
     el.textContent = '';
-    String(text || '').split('\n').forEach(function (t) {
+    String(text || '').replace(/(: |\/|・|。)/g, '$1\u0001').replace(/\(/g, '\u0001(').split('\u0001').forEach(function (t) {
       if (!t) return;
-      var sp = document.createElement('span'); sp.className = 'ln';
-      appendNoBreak(sp, t);
+      var sp = document.createElement('span'); sp.className = 'ph';
+      appendNoBreak(sp, t.replace(/ $/, ''));
       el.appendChild(sp);
+      if (/ $/.test(t)) el.appendChild(document.createTextNode(' '));
     });
   }
-  // 確認の画面の条件(ctaCond)は1段落。行頭の .ln は付けず、金額などの途中で改行しないことだけそろえる
-  function fillPara(el, text) {
-    el.textContent = '';
-    appendNoBreak(el, text);
+  function detailList(lines) {
+    var ul = document.createElement('ul');
+    lines.forEach(function (t) { var li = document.createElement('li'); appendNoBreak(li, t); ul.appendChild(li); });
+    return ul;
   }
-  function paintCondOpen() {
-    var more = $('condMore'), tg = $('condToggle');
-    more.hidden = !more.firstChild || (condIsFolded && !condOpen);
-    tg.hidden = !condIsFolded;
-    tg.setAttribute('aria-expanded', condIsFolded && condOpen ? 'true' : 'false');
-    $('condToggleT').textContent = condIsFolded && condOpen ? 'ご利用条件を閉じる' : 'ご利用条件をすべて見る';
-  }
-  // 画面を切り替えるたびに呼ぶ(開いていた条件も、次の画面ではたたんだ状態に戻す)
-  function paintCond(step) {
-    var m = state.mode ? MODES[state.mode] : null;
-    fillLines($('condSum'), m ? m.summary : COND_NONE);
-    fillLines($('condMore'), m ? m.cond : '');
-    condIsFolded = condFolded(step, state.mode);
-    condOpen = false;
-    paintCondOpen();
-  }
-  function toggleCond() {
-    if (!condIsFolded) return;
-    condOpen = !condOpen;
-    paintCondOpen();
+  // 診療を選んだあとはその診療の内訳だけ。選ぶ前(選択画面)は、表示している診療ごとに見出しを付けて並べる
+  function paintDetail() {
+    var box = $('detailBody');
+    box.textContent = '';
+    var keys = state.mode ? [state.mode] : Object.keys(MODES).filter(isOn);
+    keys.forEach(function (k) {
+      if (!state.mode) { var h = document.createElement('h3'); h.className = 'detail-sub'; h.textContent = MODES[k].topic; box.appendChild(h); }
+      box.appendChild(detailList(MODES[k].detail));
+    });
   }
   function resetCta() {
     ctaEl.classList.remove('is-busy');
-    ctaMain.textContent = 'LINEでクーポンのご案内を受け取る';
+    ctaMain.textContent = 'LINEでクーポンを受け取る';
     ctaHint.textContent = '';
     doneNote.hidden = true;
     copyStatus.textContent = '';
@@ -645,7 +667,6 @@
     $('sumConcern').textContent = c.label;
     $('sumTel').textContent = state.phone;
     $('sumTime').textContent = t.label + (t.note ? '(' + t.note + ')' : '');
-    fillPara($('ctaCond'), MODES[state.mode].ctaCond);
     var msg = buildMessage();
     $('msg').textContent = msg;
     ctaEl.href = lineUrl(msg);
@@ -769,7 +790,30 @@
     go(2, 'push');
   });
   $('back1').addEventListener('click', backToSelect);
-  $('condToggle').addEventListener('click', toggleCond);
+  // 最下部の「クーポン内訳」の開閉(最初はたたむ。開いたかどうかはページを開いている間だけ・どこにも保存しない)
+  function setDetailOpen(open) {
+    $('detailToggle').setAttribute('aria-expanded', open ? 'true' : 'false');
+    $('detailBody').hidden = !open;
+  }
+  $('detailToggle').addEventListener('click', function () {
+    setDetailOpen($('detailToggle').getAttribute('aria-expanded') !== 'true');
+  });
+  // 「クーポン内訳はこちら」(見出しの下と選択画面の2か所): 最下部の内訳を開いて動かし、内訳のボタンに移る(URL・履歴は変えない)
+  function goDetail(e) {
+    e.preventDefault();
+    var d = $('coupon-detail'), h = $('detailToggle');
+    setDetailOpen(true);
+    try { h.focus({ preventScroll: true }); } catch (e1) { h.focus(); }
+    try { d.scrollIntoView({ block: 'start', behavior: smoothOk() ? 'smooth' : 'auto' }); } catch (e2) { d.scrollIntoView(true); }
+  }
+  $('detailLink').addEventListener('click', goDetail);
+  $('detailLink0').addEventListener('click', goDetail);
+  // 「送信と保存について」の開閉(開いたかどうかはどこにも保存しない)
+  $('privToggle').addEventListener('click', function () {
+    var tg = $('privToggle'), open = tg.getAttribute('aria-expanded') !== 'true';
+    tg.setAttribute('aria-expanded', open ? 'true' : 'false');
+    $('privNote').hidden = !open;
+  });
   telEl.addEventListener('blur', function () {
     var p = parsePhone(telEl.value);
     if (p.ok) { telEl.value = p.value; telEl.removeAttribute('aria-invalid'); }
@@ -847,7 +891,7 @@
 
   /* ---------- 開始 ---------- */
   $('s2hint').textContent = FLOW_INPUT;
-  $('ctaGuide').textContent = 'ボタンを押すと、ハハロルオンラインクリニックのLINEトークが開き、下の文が入力欄に入ります。文は変えずに、右下の送信ボタン(紙飛行機のマーク)を押してください。' + FLOW_LINE;
+  $('ctaGuide').textContent = '「LINEでクーポンを受け取る」を押すと、ハハロルオンラインクリニックのLINEトークが開き、上の枠の文が入力欄に入ります。文は変えずに、右下の送信ボタン(紙飛行機のマーク)を押してください。' + FLOW_LINE;
   buildModeButtons();
   state.mode = modeFromUrl();
   var hs = history.state || {};
