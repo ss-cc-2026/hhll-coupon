@@ -158,6 +158,7 @@
     display: flex; align-items: center; justify-content: center; min-height: 56px; padding: 10px 16px; border-radius: 999px; background: #06C755; color: #fff;
     text-decoration: none; font-size: 20px; font-weight: 700; line-height: 1.4; box-shadow: 0 3px 0 rgba(0,0,0,.18);
   }
+  .cta > span { text-align: center; }
   .cta.is-busy { opacity: .75; }
   .cta:focus-visible { outline: 3px solid #fff; outline-offset: 3px; }
   /* ボタンのすぐ下の補足(小さい文字) */
@@ -191,6 +192,13 @@
   .detail-toggle .chev { flex: none; width: 9px; height: 9px; border-right: 3px solid currentColor; border-bottom: 3px solid currentColor; transform: translateY(-3px) rotate(45deg); }
   .detail-toggle[aria-expanded="true"] .chev { transform: translateY(3px) rotate(-135deg); }
   .detail-body { padding-bottom: 12px; }
+  /* 内訳から、いまの画面の先頭に戻る(内訳を開いたときだけ出す) */
+  .detail-back-row { margin: 0 0 12px; }
+  .detail-back {
+    display: flex; align-items: center; justify-content: center; width: 100%; min-height: 48px; padding: 8px 12px;
+    border: 2px solid var(--line-strong); border-radius: 10px; background: #fff; color: var(--green-dark);
+    font: inherit; font-size: 15px; font-weight: 700; line-height: 1.4; cursor: pointer;
+  }
   .detail-sub { font-size: 14px; line-height: 1.5; color: var(--green); margin: 10px 0 2px; }
   .detail ul { list-style: none; font-size: 14px; line-height: 1.7; }
   .detail li { position: relative; padding-left: 1em; text-indent: 0; margin-bottom: 0; }
@@ -302,7 +310,7 @@
           <pre class="msg" id="msg" translate="no"></pre>
         </figure>
         <p class="done-note" id="doneNote" role="status" hidden>LINEで送信できた方は、これで完了です。このページは閉じてかまいません。</p>
-        <a class="cta" id="cta" href="#" aria-describedby="ctaNote"><span id="ctaMain">LINEでクーポンを受け取る</span></a>
+        <a class="cta" id="cta" href="#" aria-describedby="ctaNote"><span id="ctaMain"><span class="ph">LINEで</span><span class="ph">クーポンを受け取る</span></span></a>
         <p class="cta-note" id="ctaNote"><span class="ph">LINEのトーク画面が開きます。</span><span class="ph">クーポンはお支払いのときに当院で適用します</span></p>
         <p class="cta-hint" id="ctaHint" role="status" aria-live="polite"></p>
         <div class="copy-area">
@@ -321,6 +329,7 @@
     <section class="detail" id="coupon-detail" aria-labelledby="detailToggle">
       <h2 class="detail-h"><button type="button" class="detail-toggle" id="detailToggle" aria-expanded="false" aria-controls="detailBody"><span>クーポン内訳(価格・ご利用条件)</span><span class="chev" aria-hidden="true"></span></button></h2>
       <div class="detail-body" id="detailBody" hidden></div>
+      <p class="detail-back-row" id="detailBackRow" hidden><button type="button" class="detail-back" id="detailBack">▲ 入力の続きに戻る</button></p>
     </section>
     <ul id="notes"></ul>
     <button type="button" class="priv-toggle" id="privToggle" aria-expanded="false" aria-controls="privNote"><span>送信と保存について</span><span class="chev" aria-hidden="true"></span></button>
@@ -344,7 +353,7 @@
   // 受付への送信先(Googleフォームの formResponse と、送信内容のJSONを入れる段落欄の entry)。どちらかが '' のあいだは何も送らない
   var FORM_ACTION = 'https://docs.google.com/forms/d/e/1FAIpQLSeZxWdJjPheOwWr5KdIcQEOeiv9RO_j6GPp0oO4AGr6bITg3w/formResponse';
   var FORM_ENTRY = 'entry.1217027792';
-  var PAGE_V = '2026-10-06.3';
+  var PAGE_V = '2026-10-06.4';
 
   var OA_ID = '@837mhqha';
   var HOURS = '毎日10:00〜20:00(土日祝も)';
@@ -361,14 +370,15 @@
       enabled: true,
       title: ['AGA(薄毛)治療', '初回クーポン'], sub: '90日分のうち1ヶ月分が無料(約33%OFF)',
       topic: 'AGA(薄毛)治療', key: '#初回クーポン申込_AGA',
-      summary: '※初回のお支払い6,480円〜(通常9,720円〜・お薬により異なります)。2回目以降は通常価格',
+      summary: '※初回のお支払い6,480円〜(通常9,720円〜・お薬により異なります)。90日ごとの定期で、2回目以降は通常価格',
       detail: [
         '自由診療・税込・初回購入限定です(このLINEで初めてお薬をご購入される方が対象です)。',
         '90日分のお薬をまとめてお届けします。90日分のうち1ヶ月分(1/3)が無料(約33%OFF)です。',
         '初回のお支払いは6,480円〜(通常9,720円〜)です。金額はお薬により異なります。',
-        '2回目以降は通常価格です。',
+        '90日ごとにお届け・お支払いする定期のお薬です(最大4回)。2回目以降は通常価格です。',
         '対象は1種類のお薬の90日分です。2種類のセットは、お電話でご案内します。',
-        '詳しいご利用条件は、LINEでご案内します。'
+        '女性の方は、対象のお薬と金額が異なる場合があります。処方の可否は医師が診察で判断します。',
+        '解約の条件・方法など詳しいご利用条件は、LINEでご案内します。'
       ],
       target: '※このLINEで初めてお薬をご購入される方(初回購入限定)が対象です。',
       noRx: '※お薬の処方の可否は医師が診察で判断します。処方に至らない場合の費用は、お電話でご案内します。',
@@ -390,7 +400,7 @@
         '解約の方法など詳しいご利用条件は、LINEでご案内します。'
       ],
       target: '※当院で初めてメディカルダイエットの診察を受ける方が対象です。',
-      noRx: '※お薬の処方の可否は医師が診察で判断します。処方に至らない場合、費用はかかりません。',
+      noRx: '※お薬の処方の可否は医師が診察で判断します。処方に至らない場合の費用は、お電話でご案内します。',
       costNote: '※費用(2ヶ月目以降を含む総額)と主なリスク・副作用は、LINEでご案内し、診察で医師がご説明します。'
     }
   };
@@ -655,9 +665,14 @@
       box.appendChild(detailList(MODES[k].detail));
     });
   }
+  // LINEのボタンの文言は、言葉のまとまり(.ph)ごとに入れて、語の途中で折り返さない
+  function setCtaText(parts) {
+    ctaMain.textContent = '';
+    parts.forEach(function (t) { var sp = document.createElement('span'); sp.className = 'ph'; sp.textContent = t; ctaMain.appendChild(sp); });
+  }
   function resetCta() {
     ctaEl.classList.remove('is-busy');
-    ctaMain.textContent = 'LINEでクーポンを受け取る';
+    setCtaText(['LINEで', 'クーポンを受け取る']);
     ctaHint.textContent = '';
     doneNote.hidden = true;
     copyStatus.textContent = '';
@@ -682,6 +697,7 @@
     }
     $('back1').hidden = !(step === 1 && state.s0i !== null);
     paintHeader(step);
+    $('detailBack').textContent = step === 0 ? '▲ 診療の選択に戻る' : '▲ 入力の続きに戻る';
     if (step === 3) fillConfirm();
     window.scrollTo(0, 0);
     if (moveFocus) {
@@ -794,6 +810,7 @@
   function setDetailOpen(open) {
     $('detailToggle').setAttribute('aria-expanded', open ? 'true' : 'false');
     $('detailBody').hidden = !open;
+    $('detailBackRow').hidden = !open;
   }
   $('detailToggle').addEventListener('click', function () {
     setDetailOpen($('detailToggle').getAttribute('aria-expanded') !== 'true');
@@ -808,6 +825,12 @@
   }
   $('detailLink').addEventListener('click', goDetail);
   $('detailLink0').addEventListener('click', goDetail);
+  // 内訳から、いまの画面(選択画面・ステップ1〜3)の先頭に戻り、その見出しに移る(URL・履歴は変えない)
+  $('detailBack').addEventListener('click', function () {
+    var sec = sections[cur], h = $(HEADINGS[cur]);
+    try { sec.scrollIntoView({ block: 'start', behavior: smoothOk() ? 'smooth' : 'auto' }); } catch (e1) { sec.scrollIntoView(true); }
+    try { h.focus({ preventScroll: true }); } catch (e2) { h.focus(); }
+  });
   // 「送信と保存について」の開閉(開いたかどうかはどこにも保存しない)
   $('privToggle').addEventListener('click', function () {
     var tg = $('privToggle'), open = tg.getAttribute('aria-expanded') !== 'true';
@@ -840,7 +863,7 @@
   // LINEへ(oaMessage でトークに本文を入れ、ご本人が送信)
   ctaEl.addEventListener('click', function () {
     ctaEl.classList.add('is-busy');
-    ctaMain.textContent = 'LINEを開いています…';
+    setCtaText(['LINEを開いています…']);
     doneNote.hidden = true;
     ctaHint.textContent = 'LINEでは、文は変えずに、右下の送信ボタン(紙飛行機のマーク)を押してください。';
     setTimeout(restoreCta, 5000);
@@ -849,7 +872,7 @@
     if (!ctaEl.classList.contains('is-busy')) return;
     ctaEl.classList.remove('is-busy');
     doneNote.hidden = false;
-    ctaMain.textContent = 'まだ送信していない方：もう一度LINEを開く';
+    setCtaText(['まだ送信していない方：', 'もう一度LINEを開く']);
   }
   document.addEventListener('visibilitychange', function () { if (document.visibilityState === 'visible') restoreCta(); });
 
